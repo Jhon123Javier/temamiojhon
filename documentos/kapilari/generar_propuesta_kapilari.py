@@ -299,7 +299,7 @@ def add_contacts(doc):
     ]
     for index, (icon, text) in enumerate(contacts):
         paragraph = doc.add_paragraph()
-        set_paragraph_format(paragraph, before=200 if index == 0 else 1, after=0, align="right")
+        set_paragraph_format(paragraph, before=14 if index == 0 else 1, after=0, align="right")
         if index < len(contacts) - 1:
             pPr = paragraph._p.get_or_add_pPr()
             if pPr.find(qn("w:keepNext")) is None:
@@ -361,7 +361,7 @@ def build():
             ("THE COMPANY DEV", True),
             (" presenta a KAPILARI la propuesta para el diseño, desarrollo e implementación de su presencia digital. ", False),
             ("EL CLIENTE", True),
-            (" elige una sola opción. No son etapas que se hagan una después de la otra, y esta propuesta no incluye plan de crecimiento ni administración mensual.", False),
+            (" puede empezar por la página corporativa o por la tienda virtual. El sitio queda listo para crecer: más adelante puede pedir la otra opción, funciones nuevas o la mensualidad de soporte.", False),
         ],
     )
     add_body(
@@ -440,7 +440,11 @@ def build():
     add_body(
         doc,
         [
-            ("La tienda permite publicar el catálogo, armar el pedido y gestionarlo desde un panel. La pasarela de pago no está incluida.", False),
+            ("La tienda permite publicar el catálogo, armar el pedido y gestionarlo desde un panel. Queda lista para conectar una pasarela de pago. El costo de la pasarela lo asume ", False),
+            ("EL CLIENTE", True),
+            (". Cuando KAPILARI quiera activarla, ", False),
+            ("THE COMPANY DEV", True),
+            (" hace la conexión.", False),
         ],
     )
 
@@ -450,7 +454,7 @@ def build():
         "Página de inicio.",
         "Nosotros.",
         "Servicios.",
-        "Blog, listo para publicar. La redacción de artículos no está incluida.",
+        "Blog listo para publicar. KAPILARI entrega los textos y, con la mensualidad, se publican y se optimizan para SEO.",
         "Contacto, con formulario.",
         "Integración con WhatsApp.",
         "Integración con redes sociales.",
@@ -477,7 +481,11 @@ def build():
         add_bullet(doc, [(item, False)])
     add_bullet(
         doc,
-        [("Integración con pasarela de pago. La pasarela no está incluida en este valor.", False)],
+        [
+            ("Conexión con pasarela de pago cuando KAPILARI la tenga. El costo de la pasarela lo asume ", False),
+            ("EL CLIENTE", True),
+            (".", False),
+        ],
     )
 
     add_subheading(doc, "2.2 Diseño")
@@ -567,7 +575,9 @@ def build():
     add_body(
         doc,
         [
-            ("La administración mensual, el mantenimiento continuo, las copias de seguridad periódicas y el plan de crecimiento no están incluidos.", False),
+            ("Al entregar el sitio, KAPILARI puede seguir con la mensualidad de soporte. Ahí van el mantenimiento, las copias de seguridad, el blog, el ", False),
+            ("SEO", True),
+            (" y, en la tienda, la subida de productos. El detalle y los valores están al final de esta propuesta.", False),
         ],
     )
 
@@ -611,7 +621,9 @@ def build():
             ("El trabajo inicia cuando la propuesta está aceptada y se ha hecho el primer pago.", False),
         ],
         [
-            ("Lo que no esté escrito en esta propuesta se cotiza aparte.", False),
+            ("Si KAPILARI necesita algo más después de la entrega, lo pide y ", False),
+            ("THE COMPANY DEV", True),
+            (" lo cotiza. El sitio puede seguir creciendo.", False),
         ],
         [
             ("El plazo máximo es de 1 semana para la página corporativa y de 2 semanas para la tienda virtual. Esos plazos aplican si KAPILARI entrega la información completa en el momento en que se le solicita. Si la entrega se retrasa, el plazo se corre en los días hábiles de ese retraso.", False),
@@ -622,14 +634,13 @@ def build():
             (".", False),
         ],
         [
-            ("Los cambios de estructura pedidos después de aprobar el diseño pueden tener un costo adicional.", False),
-        ],
-        [
-            ("Esta propuesta no incluye plan de crecimiento, administración mensual ni mantenimiento continuo.", False),
+            ("Si después de aprobar el diseño KAPILARI pide un cambio de estructura, ", False),
+            ("THE COMPANY DEV", True),
+            (" lo revisa y lo cotiza.", False),
         ],
         [
             ("EL CLIENTE", True),
-            (" elige la Opción A o la Opción B. Los dos valores no se suman, porque no se contratan las dos opciones dentro de esta propuesta.", False),
+            (" puede empezar por la Opción A o por la Opción B. Más adelante puede pedir la otra opción o funciones nuevas, y ese trabajo se cotiza cuando lo solicite.", False),
         ],
     ]
     for parts in terms:
@@ -668,9 +679,11 @@ def build():
     add_body(
         doc,
         [
-            ("El hosting y el dominio no están incluidos en estos valores. Si KAPILARI no los tiene, ", False),
+            ("El hosting y el dominio los paga ", False),
+            ("EL CLIENTE", True),
+            (". Si KAPILARI no los tiene, ", False),
             ("THE COMPANY DEV", True),
-            (" indica cómo adquirirlos. La renovación anual queda a cargo de ", False),
+            (" indica cómo adquirirlos. La renovación anual también queda a cargo de ", False),
             ("EL CLIENTE", True),
             (".", False),
         ],
@@ -690,10 +703,90 @@ def build():
     ]:
         add_bullet(doc, [(item, False)])
 
+    add_heading(doc, "7. Mensualidad de soporte")
     add_body(
         doc,
         [
-            ("Quedo atento para revisar con KAPILARI cuál de las dos opciones se ajusta a lo que necesita y dejar la fecha de inicio.", False),
+            ("La mensualidad empieza después de publicar el sitio. Es el acompañamiento para que la página siga al día y pueda crecer. ", False),
+            ("EL CLIENTE", True),
+            (" la toma según la opción que tenga. Si un mes necesita más de lo que cubre el plan, lo pide y ", False),
+            ("THE COMPANY DEV", True),
+            (" lo cotiza.", False),
+        ],
+    )
+
+    add_subheading(doc, "Página corporativa")
+    add_body(
+        doc,
+        [("Valor: ", False), ("$150.000 COP al mes.", True)],
+        before=2,
+        after=4,
+    )
+    add_body(
+        doc,
+        [("Cada mes incluye:", False)],
+        before=0,
+        after=2,
+        keep_next=True,
+    )
+    for parts in [
+        [("Mantenimiento técnico del sitio: revisión de carga, enlaces, formulario y panel.", False)],
+        [("Revisión de que se vea bien en celular y en computador.", False)],
+        [("Revisión de WhatsApp, redes sociales y mapa.", False)],
+        [("Actualizaciones de seguridad de la plataforma.", False)],
+        [("Copia de seguridad del sitio y resguardo para restaurarlo si hace falta.", False)],
+        [("Publicación en el blog de los textos y las imágenes que entregue KAPILARI.", False)],
+        [("Optimización ", False), ("SEO", True), (" de cada entrada: título, descripción, enlace y estructura.", False)],
+        [("Revisión ", False), ("SEO", True), (" básica de las páginas principales.", False)],
+        [("Cambios menores de textos e imágenes en las páginas que ya existen.", False)],
+        [("Atención por WhatsApp y correo, de lunes a viernes, de 9:00 a.m. a 5:00 p.m. Respuesta máxima: 24 horas hábiles.", False)],
+    ]:
+        add_bullet(doc, parts)
+
+    add_subheading(doc, "Tienda virtual")
+    add_body(
+        doc,
+        [("Valor: ", False), ("$250.000 COP al mes.", True), (" Tope: ", False), ("50 productos al mes.", True)],
+        before=2,
+        after=4,
+    )
+    add_body(
+        doc,
+        [
+            ("Incluye todo el cuidado de la página corporativa, aplicado a la tienda, y además el trabajo del catálogo:", False),
+        ],
+        before=0,
+        after=2,
+        keep_next=True,
+    )
+    for parts in [
+        [("Mantenimiento técnico de la tienda: carga, enlaces, panel, carrito y checkout.", False)],
+        [("Revisión en celular y en computador.", False)],
+        [("Revisión de WhatsApp, redes y métodos de envío.", False)],
+        [("Actualizaciones de seguridad de la plataforma.", False)],
+        [("Copia de seguridad de la tienda y resguardo para restaurarla si hace falta.", False)],
+        [("Publicación en el blog de los textos y las imágenes que entregue KAPILARI.", False)],
+        [("Optimización ", False), ("SEO", True), (" de cada entrada y revisión ", False), ("SEO", True), (" básica de las páginas principales.", False)],
+        [("Cambios menores de textos e imágenes en las páginas que ya existen.", False)],
+        [("Subida de hasta 50 productos en el mes. Cada uno lleva la foto, el nombre, la descripción, la categoría y el precio que entregue KAPILARI.", False)],
+        [("Variantes del producto, cuando KAPILARI las entregue junto con la ficha.", False)],
+        [("Actualización de precios e inventario de esos productos.", False)],
+        [("Orden de las categorías del catálogo.", False)],
+        [("Atención por WhatsApp y correo, de lunes a viernes, de 9:00 a.m. a 5:00 p.m. Respuesta máxima: 24 horas hábiles.", False)],
+    ]:
+        add_bullet(doc, parts)
+    add_body(
+        doc,
+        [
+            ("Si en un mes hacen falta más de 50 productos, o KAPILARI pide una sección o una función nueva, ese trabajo se cotiza en ese momento. La tienda que ya está publicada sigue igual y puede seguir creciendo.", False),
+        ],
+        before=4,
+    )
+
+    add_body(
+        doc,
+        [
+            ("Quedo atento para revisar con KAPILARI por dónde empezar y dejar la fecha de inicio.", False),
         ],
         before=8,
     )
