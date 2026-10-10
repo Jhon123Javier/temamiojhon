@@ -291,15 +291,6 @@ def add_label_line(doc, label, value):
     return paragraph
 
 
-def highlight_yellow(run):
-    rPr = run._element.get_or_add_rPr()
-    highlight = rPr.find(qn("w:highlight"))
-    if highlight is None:
-        highlight = OxmlElement("w:highlight")
-        rPr.append(highlight)
-    highlight.set(qn("w:val"), "yellow")
-
-
 def set_table_widths(table, widths):
     table.autofit = False
     tbl = table._tbl
@@ -328,46 +319,6 @@ def set_table_widths(table, widths):
         grid.append(col)
 
 
-def add_investment_summary(doc):
-    add_heading(doc, "8. Resumen de inversión")
-    add_body(
-        doc,
-        [("Estos son los valores de la propuesta, reunidos al cierre:", False)],
-        before=0,
-        after=4,
-        keep_next=True,
-    )
-    rows = [
-        ("Sitio web corporativo", "$800.000 COP"),
-        ("Plan de redes sociales", "$1.000.000 COP al mes"),
-        ("Consultoría y asesoría de campaña", "$50.000 COP por campaña"),
-        ("Realización de cada campaña", "$120.000 COP cada una"),
-    ]
-    widths = [5600, 4048]
-    table = doc.add_table(rows=1 + len(rows), cols=2)
-    table.alignment = WD_TABLE_ALIGNMENT.CENTER
-    set_table_widths(table, widths)
-    headers = ("CONCEPTO", "VALOR")
-    for index, header in enumerate(headers):
-        cell = table.rows[0].cells[index]
-        write_cell(cell, header, bold=True, align="center", fill=DARK, size=12, color=RGBColor(255, 255, 255))
-        cell.width = Twips(widths[index])
-    prevent_row_split(table.rows[0], keep_with_next=True)
-    for r_index, (concept, value) in enumerate(rows):
-        concept_cell = table.rows[r_index + 1].cells[0]
-        value_cell = table.rows[r_index + 1].cells[1]
-        write_cell(concept_cell, concept, bold=False, align="left", fill="FFFFFF", size=12)
-        write_cell(value_cell, value, bold=True, align="right", fill="FFFF00", size=12)
-        for paragraph in value_cell.paragraphs:
-            for run in paragraph.runs:
-                highlight_yellow(run)
-        concept_cell.width = Twips(widths[0])
-        value_cell.width = Twips(widths[1])
-        prevent_row_split(table.rows[r_index + 1], keep_with_next=r_index < len(rows) - 1)
-    spacer = doc.add_paragraph()
-    set_paragraph_format(spacer, before=2, after=2, align="left")
-
-
 def add_contacts(doc):
     contacts = [
         (ASSETS / "icon_telefono.png", "3107862438 - 3118620020"),
@@ -376,7 +327,7 @@ def add_contacts(doc):
     ]
     spacer = doc.add_paragraph()
     set_paragraph_format(spacer, before=0, after=0, align="left")
-    spacer.paragraph_format.space_before = Pt(8)
+    spacer.paragraph_format.space_before = Pt(90)
     table = doc.add_table(rows=len(contacts), cols=2)
     table.alignment = WD_TABLE_ALIGNMENT.RIGHT
     widths = [420, 3400]
@@ -789,6 +740,12 @@ def build():
         ],
     )
 
+    salto = doc.add_paragraph()
+    set_paragraph_format(salto, before=0, after=0, align="left")
+    salto_run = salto.add_run()
+    set_run_font(salto_run, size=1)
+    salto_run.add_break(WD_BREAK.PAGE)
+
     add_heading(doc, "7. Entregables")
     add_body(doc, [("Del sitio web:", False)], before=2, after=2, align="left", keep_next=True)
     for item in [
@@ -819,8 +776,11 @@ def build():
     )
 
     table = doc.add_table(rows=1, cols=2)
-    table.autofit = True
+    table.alignment = WD_TABLE_ALIGNMENT.CENTER
+    set_table_widths(table, [4824, 4824])
     left, right = table.rows[0].cells
+    left.width = Twips(4824)
+    right.width = Twips(4824)
     for cell, lines in (
         (
             left,
@@ -858,12 +818,8 @@ def build():
             run = paragraph.add_run(text)
             set_run_font(run, size=13, bold=bold, color=BLACK)
         space = cell.paragraphs[0]
-        space.paragraph_format.space_before = Pt(18)
+        space.paragraph_format.space_before = Pt(22)
 
-    cierre = doc.add_paragraph()
-    set_paragraph_format(cierre, before=0, after=0, align="left")
-    cierre.paragraph_format.space_before = Pt(78)
-    add_investment_summary(doc)
     add_contacts(doc)
 
     doc.core_properties.title = "Propuesta comercial Talitacumdancecol - The Company Dev"
