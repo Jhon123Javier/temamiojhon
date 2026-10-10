@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Propuesta comercial Talitacumdacecol con membrete de The Company Dev."""
+"""Propuesta comercial Talitacumdancecol con membrete de The Company Dev."""
 
 from pathlib import Path
 
@@ -12,7 +12,7 @@ from docx.shared import Cm, Inches, Pt, RGBColor, Twips
 
 ROOT = Path(__file__).resolve().parent
 ASSETS = ROOT / "assets"
-OUT = ROOT / "Propuesta The Company Dev - Talitacumdacecol - Sitio Web y Redes.docx"
+OUT = ROOT / "Propuesta The Company Dev - Talitacumdancecol - Sitio Web y Redes.docx"
 
 NAVY = RGBColor(0x00, 0x30, 0x60)
 BLACK = RGBColor(0x1B, 0x33, 0x25)
@@ -291,23 +291,125 @@ def add_label_line(doc, label, value):
     return paragraph
 
 
+def highlight_yellow(run):
+    rPr = run._element.get_or_add_rPr()
+    highlight = rPr.find(qn("w:highlight"))
+    if highlight is None:
+        highlight = OxmlElement("w:highlight")
+        rPr.append(highlight)
+    highlight.set(qn("w:val"), "yellow")
+
+
+def set_table_widths(table, widths):
+    table.autofit = False
+    tbl = table._tbl
+    tblPr = tbl.tblPr if tbl.tblPr is not None else OxmlElement("w:tblPr")
+    tblW = tblPr.find(qn("w:tblW"))
+    if tblW is None:
+        tblW = OxmlElement("w:tblW")
+        tblPr.append(tblW)
+    tblW.set(qn("w:w"), str(sum(widths)))
+    tblW.set(qn("w:type"), "dxa")
+    layout = tblPr.find(qn("w:tblLayout"))
+    if layout is None:
+        layout = OxmlElement("w:tblLayout")
+        tblPr.append(layout)
+    layout.set(qn("w:type"), "fixed")
+    grid = tbl.find(qn("w:tblGrid"))
+    if grid is not None:
+        for child in list(grid):
+            grid.remove(child)
+    else:
+        grid = OxmlElement("w:tblGrid")
+        tblPr.addnext(grid)
+    for width in widths:
+        col = OxmlElement("w:gridCol")
+        col.set(qn("w:w"), str(width))
+        grid.append(col)
+
+
+def add_investment_summary(doc):
+    add_heading(doc, "8. Resumen de inversión")
+    add_body(
+        doc,
+        [("Estos son los valores de la propuesta, reunidos al cierre:", False)],
+        before=0,
+        after=4,
+        keep_next=True,
+    )
+    rows = [
+        ("Sitio web corporativo", "$800.000 COP"),
+        ("Plan de redes sociales", "$1.000.000 COP al mes"),
+        ("Consultoría y asesoría de campaña", "$50.000 COP por campaña"),
+        ("Realización de cada campaña", "$120.000 COP cada una"),
+    ]
+    widths = [5600, 4048]
+    table = doc.add_table(rows=1 + len(rows), cols=2)
+    table.alignment = WD_TABLE_ALIGNMENT.CENTER
+    set_table_widths(table, widths)
+    headers = ("CONCEPTO", "VALOR")
+    for index, header in enumerate(headers):
+        cell = table.rows[0].cells[index]
+        write_cell(cell, header, bold=True, align="center", fill=DARK, size=12, color=RGBColor(255, 255, 255))
+        cell.width = Twips(widths[index])
+    prevent_row_split(table.rows[0], keep_with_next=True)
+    for r_index, (concept, value) in enumerate(rows):
+        concept_cell = table.rows[r_index + 1].cells[0]
+        value_cell = table.rows[r_index + 1].cells[1]
+        write_cell(concept_cell, concept, bold=False, align="left", fill="FFFFFF", size=12)
+        write_cell(value_cell, value, bold=True, align="right", fill="FFFF00", size=12)
+        for paragraph in value_cell.paragraphs:
+            for run in paragraph.runs:
+                highlight_yellow(run)
+        concept_cell.width = Twips(widths[0])
+        value_cell.width = Twips(widths[1])
+        prevent_row_split(table.rows[r_index + 1], keep_with_next=r_index < len(rows) - 1)
+    spacer = doc.add_paragraph()
+    set_paragraph_format(spacer, before=2, after=2, align="left")
+
+
 def add_contacts(doc):
     contacts = [
         (ASSETS / "icon_telefono.png", "3107862438 - 3118620020"),
         (ASSETS / "icon_correo.png", "info@thecompanydev.com"),
         (ASSETS / "icon_web.png", "www.thecompanydev.com"),
     ]
+    spacer = doc.add_paragraph()
+    set_paragraph_format(spacer, before=0, after=0, align="left")
+    spacer.paragraph_format.space_before = Pt(8)
+    table = doc.add_table(rows=len(contacts), cols=2)
+    table.alignment = WD_TABLE_ALIGNMENT.RIGHT
+    widths = [420, 3400]
+    set_table_widths(table, widths)
     for index, (icon, text) in enumerate(contacts):
-        paragraph = doc.add_paragraph()
-        set_paragraph_format(paragraph, before=14 if index == 0 else 1, after=0, align="right")
-        if index < len(contacts) - 1:
-            pPr = paragraph._p.get_or_add_pPr()
-            if pPr.find(qn("w:keepNext")) is None:
-                pPr.append(OxmlElement("w:keepNext"))
-        icon_run = paragraph.add_run()
+        icon_cell = table.rows[index].cells[0]
+        text_cell = table.rows[index].cells[1]
+        icon_cell.text = ""
+        text_cell.text = ""
+        for cell in (icon_cell, text_cell):
+            tc = cell._tc
+            tcPr = tc.get_or_add_tcPr()
+            borders = OxmlElement("w:tcBorders")
+            for edge in ("top", "left", "bottom", "right"):
+                element = OxmlElement(f"w:{edge}")
+                element.set(qn("w:val"), "nil")
+                borders.append(element)
+            tcPr.append(borders)
+            set_cell_margins(cell, top=20, bottom=20, left=40, right=40)
+            v_align = OxmlElement("w:vAlign")
+            v_align.set(qn("w:val"), "center")
+            tcPr.append(v_align)
+        icon_paragraph = icon_cell.paragraphs[0]
+        set_paragraph_format(icon_paragraph, before=0, after=0, align="center")
+        icon_run = icon_paragraph.add_run()
         icon_run.add_picture(str(icon), width=Inches(0.2), height=Inches(0.2))
-        text_run = paragraph.add_run("  " + text)
+        text_paragraph = text_cell.paragraphs[0]
+        set_paragraph_format(text_paragraph, before=0, after=0, align="left")
+        text_run = text_paragraph.add_run(text)
         set_run_font(text_run, size=11, bold=False, color=BLACK)
+        icon_cell.width = Twips(widths[0])
+        text_cell.width = Twips(widths[1])
+        prevent_row_split(table.rows[index], keep_with_next=index < len(contacts) - 1)
 
 
 def build():
@@ -329,7 +431,7 @@ def build():
 
     add_label_line(doc, "Fecha     ", "10 de octubre de 2026")
     add_label_line(doc, "Asunto   ", "Propuesta de Prestación de Servicios")
-    add_label_line(doc, "Para      ", "Talitacumdacecol")
+    add_label_line(doc, "Para      ", "Talitacumdancecol")
 
     add_body(
         doc,
@@ -357,7 +459,7 @@ def build():
         [
             ("Por medio de la presente, ", False),
             ("THE COMPANY DEV", True),
-            (" presenta a Talitacumdacecol la propuesta para su sitio web corporativo y para el manejo mensual de sus redes sociales. ", False),
+            (" presenta a Talitacumdancecol la propuesta para su sitio web corporativo y para el manejo mensual de sus redes sociales. ", False),
             ("EL CLIENTE", True),
             (" puede tomar uno de los dos frentes o los dos. El trabajo queda listo para crecer: más adelante puede pedir campañas, más piezas o funciones nuevas.", False),
         ],
@@ -376,9 +478,9 @@ def build():
         [
             ("Plan de redes sociales. ", True),
             ("Cada mes incluye ayuda de guiones, edición y subida de ", False),
-            ("14 videos", True),
+            ("8 videos", True),
             (", y edición y publicación de ", False),
-            ("16 imágenes", True),
+            ("12 imágenes", True),
             (" en todas las redes. Valor: ", False),
             ("$1.000.000 COP al mes", True),
             (".", False),
@@ -400,7 +502,7 @@ def build():
     add_body(
         doc,
         [
-            ("Dejar a Talitacumdacecol con un sitio web corporativo claro y, si lo toma, con un plan mensual que publique videos e imágenes en sus redes. ", False),
+            ("Dejar a Talitacumdancecol con un sitio web corporativo claro y, si lo toma, con un plan mensual que publique videos e imágenes en sus redes. ", False),
             ("EL CLIENTE", True),
             (" también puede pedir consultoría de campañas o que ", False),
             ("THE COMPANY DEV", True),
@@ -415,7 +517,7 @@ def build():
         [
             ("Valor del proyecto: ", False),
             ("$800.000 COP", True),
-            (". El calendario de publicación se fija el día en que Talitacumdacecol entregue la información completa.", False),
+            (". El calendario de publicación se fija el día en que Talitacumdancecol entregue la información completa.", False),
         ],
         after=4,
     )
@@ -430,13 +532,13 @@ def build():
         "Página de inicio.",
         "Nosotros.",
         "Servicios.",
-        "Blog listo para publicar. Talitacumdacecol entrega los textos.",
+        "Blog listo para publicar. Talitacumdancecol entrega los textos.",
         "Contacto, con formulario.",
         "Integración con WhatsApp.",
         "Integración con redes sociales.",
         "Google Maps.",
         "Diseño adaptable a celular, tableta y computador.",
-        "Diseño con el logo, los colores y la información de Talitacumdacecol.",
+        "Diseño con el logo, los colores y la información de Talitacumdancecol.",
         "Una ronda de ajustes después de la primera revisión.",
         "Panel administrativo.",
         "Configuración del sitio, del hosting y del certificado SSL.",
@@ -451,14 +553,14 @@ def build():
         [
             ("Valor: ", False),
             ("$1.000.000 COP al mes", True),
-            (". Ese valor cubre las dos partes juntas: los 14 videos y las 16 imágenes. No se cobra cada parte por separado.", False),
+            (". Ese valor cubre las dos partes juntas: los 8 videos y las 12 imágenes. No se cobra cada parte por separado.", False),
         ],
         after=4,
     )
     add_body(
         doc,
         [
-            ("Las piezas se publican en las redes que Talitacumdacecol tenga activas y a las que dé acceso, por ejemplo Instagram, Facebook, TikTok o las que indique. El material de base lo entrega ", False),
+            ("Las piezas se publican en las redes que Talitacumdancecol tenga activas y a las que dé acceso, por ejemplo Instagram, Facebook, TikTok o las que indique. El material de base lo entrega ", False),
             ("EL CLIENTE", True),
             (" al empezar el mes: videos ya grabados y fotos. ", False),
             ("THE COMPANY DEV", True),
@@ -466,28 +568,28 @@ def build():
         ],
     )
 
-    add_body(doc, [("Videos: 14 en el mes", True)], before=4, after=2, align="left", keep_next=True)
+    add_body(doc, [("Videos: 8 en el mes", True)], before=4, after=2, align="left", keep_next=True)
     for parts in [
         [("Ayuda con el guion de cada video: estructura, mensaje y texto.", False)],
-        [("Edición de cada video que Talitacumdacecol entregue grabado: corte, orden, texto en pantalla y música si ", False), ("EL CLIENTE", True), (" la entrega.", False)],
+        [("Edición de cada video que Talitacumdancecol entregue grabado: corte, orden, texto en pantalla y música si ", False), ("EL CLIENTE", True), (" la entrega.", False)],
         [("Miniatura o portada del video, hecha con el material entregado.", False)],
         [("Subida de cada video a las redes activas.", False)],
         [("Texto corto de la publicación de cada video.", False)],
     ]:
         add_bullet(doc, parts)
 
-    add_body(doc, [("Imágenes: 16 en el mes", True)], before=6, after=2, align="left", keep_next=True)
+    add_body(doc, [("Imágenes: 12 en el mes", True)], before=6, after=2, align="left", keep_next=True)
     for parts in [
         [("Edición de cada imagen: ajuste, formato para redes y texto sobre la pieza cuando haga falta.", False)],
         [("Texto del post de cada imagen.", False)],
-        [("Subida de cada post a todas las redes activas de Talitacumdacecol.", False)],
+        [("Subida de cada post a todas las redes activas de Talitacumdancecol.", False)],
     ]:
         add_bullet(doc, parts)
 
     add_body(
         doc,
         [
-            ("Si en un mes Talitacumdacecol necesita más de 14 videos o más de 16 imágenes, ese adicional se pide y se cotiza. Lo que ya está publicado se mantiene.", False),
+            ("Si en un mes Talitacumdancecol necesita más de 8 videos o más de 12 imágenes, ese adicional se pide y se cotiza. Lo que ya está publicado se mantiene.", False),
         ],
         before=4,
     )
@@ -522,14 +624,14 @@ def build():
     )
     for parts in [
         [("Revisión del objetivo, del mensaje y del público.", False)],
-        [("Ajuste de la pieza para pautar, con el material que entregue Talitacumdacecol.", False)],
+        [("Ajuste de la pieza para pautar, con el material que entregue Talitacumdancecol.", False)],
         [("Configuración de la campaña en la plataforma que indique ", False), ("EL CLIENTE", True), (".", False)],
         [("Segmentación y publicación.", False)],
         [("Revisión básica de resultados al cierre de esa campaña.", False)],
     ]:
         add_bullet(doc, parts)
 
-    add_heading(doc, "3. Información que debe entregar Talitacumdacecol")
+    add_heading(doc, "3. Información que debe entregar Talitacumdancecol")
     add_body(
         doc,
         [("Para el sitio web, al iniciar:", False)],
@@ -552,8 +654,8 @@ def build():
     )
     for parts in [
         [("Accesos de administrador a las redes activas.", False)],
-        [("Los videos ya grabados, hasta 14 en el mes.", False)],
-        [("Las fotos de base, hasta 16 en el mes.", False)],
+        [("Los videos ya grabados, hasta 8 en el mes.", False)],
+        [("Las fotos de base, hasta 12 en el mes.", False)],
         [("Datos de la marca: qué se quiere decir y a quién.", False)],
     ]:
         add_bullet(doc, parts)
@@ -575,7 +677,7 @@ def build():
     add_body(
         doc,
         [
-            ("El sitio web arranca cuando la propuesta está aceptada, está el primer pago y Talitacumdacecol entregó la información completa. Ese día ", False),
+            ("El sitio web arranca cuando la propuesta está aceptada, está el primer pago y Talitacumdancecol entregó la información completa. Ese día ", False),
             ("THE COMPANY DEV", True),
             (" confirma la fecha de publicación.", False),
         ],
@@ -593,7 +695,7 @@ def build():
     add_body(
         doc,
         [
-            ("El plan de redes corre por mes. Si los videos y las fotos llegan en los primeros días del mes, las 14 publicaciones de video y las 16 de imagen salen dentro de ese mes.", False),
+            ("El plan de redes corre por mes. Si los videos y las fotos llegan en los primeros días del mes, las 8 publicaciones de video y las 12 de imagen salen dentro de ese mes.", False),
         ],
         before=4,
     )
@@ -611,7 +713,7 @@ def build():
             ("El plan de redes inicia con el pago del mes y con el material de ese mes.", False),
         ],
         [
-            ("Si Talitacumdacecol entrega la información o el material después, las fechas se corren esos días.", False),
+            ("Si Talitacumdancecol entrega la información o el material después, las fechas se corren esos días.", False),
         ],
         [
             ("El hosting, el dominio, la pauta y los demás servicios externos los paga ", False),
@@ -651,7 +753,7 @@ def build():
     add_body(
         doc,
         [
-            ("Se paga al comenzar cada mes. Cubre los 14 videos, con ayuda de guion, edición y subida, y las 16 imágenes, con edición y subida del post a todas las redes activas.", False),
+            ("Se paga al comenzar cada mes. Cubre los 8 videos, con ayuda de guion, edición y subida, y las 12 imágenes, con edición y subida del post a todas las redes activas.", False),
         ],
     )
     add_subheading(doc, "Campañas")
@@ -679,7 +781,7 @@ def build():
         [
             ("El hosting y el dominio los paga ", False),
             ("EL CLIENTE", True),
-            (". Si Talitacumdacecol no los tiene, ", False),
+            (". Si Talitacumdancecol no los tiene, ", False),
             ("THE COMPANY DEV", True),
             (" indica cómo adquirirlos. La renovación anual también queda a cargo de ", False),
             ("EL CLIENTE", True),
@@ -697,8 +799,8 @@ def build():
         add_bullet(doc, [(item, False)])
     add_body(doc, [("Del mes de redes:", False)], before=4, after=2, align="left", keep_next=True)
     for item in [
-        "14 videos editados y publicados, con el guion trabajado.",
-        "16 imágenes editadas y publicadas en las redes activas.",
+        "8 videos editados y publicados, con el guion trabajado.",
+        "12 imágenes editadas y publicadas en las redes activas.",
     ]:
         add_bullet(doc, [(item, False)])
     add_body(doc, [("De cada campaña realizada:", False)], before=4, after=2, align="left", keep_next=True)
@@ -711,7 +813,7 @@ def build():
     add_body(
         doc,
         [
-            ("Quedo atento para revisar con Talitacumdacecol por dónde empezar y dejar la fecha de inicio.", False),
+            ("Quedo atento para revisar con Talitacumdancecol por dónde empezar y dejar la fecha de inicio.", False),
         ],
         before=8,
     )
@@ -732,7 +834,7 @@ def build():
             right,
             [
                 ("EL CLIENTE", True),
-                ("Talitacumdacecol", True),
+                ("Talitacumdancecol", True),
             ],
         ),
     ):
@@ -758,9 +860,13 @@ def build():
         space = cell.paragraphs[0]
         space.paragraph_format.space_before = Pt(18)
 
+    cierre = doc.add_paragraph()
+    set_paragraph_format(cierre, before=0, after=0, align="left")
+    cierre.paragraph_format.space_before = Pt(78)
+    add_investment_summary(doc)
     add_contacts(doc)
 
-    doc.core_properties.title = "Propuesta comercial Talitacumdacecol - The Company Dev"
+    doc.core_properties.title = "Propuesta comercial Talitacumdancecol - The Company Dev"
     doc.core_properties.author = "The Company Dev"
     doc.core_properties.subject = "Sitio web corporativo, plan de redes y campañas"
     doc.save(OUT)
