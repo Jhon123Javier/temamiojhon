@@ -580,7 +580,7 @@ def build():
         doc,
         [
             (
-                f"La recomendación es cobrar {cop(per_module)} por usuario activo al mes en cada módulo. Son tres: CRM y ERP de gestión, asistencia, y Drive. Un módulo, en 30 usuarios, son {cop(per_module * team)} al mes. Los tres juntos son {cop(full_user)} por usuario, {cop(full_user * team)} al mes. La licencia regional de Odoo Standard queda en {cop(usd_to_cop(odoo_co_std))} por usuario. La VPS y el dominio los paga el cliente: la renovación del KVM 1 sale en {cop(kvm1_renew * 12)} al año.",
+                f"La directriz es cobrar {cop(per_module)} por usuario activo al mes en cada módulo. Son tres: CRM y ERP de gestión, asistencia, y Drive. Un módulo, en 30 usuarios, son {cop(per_module * team)} al mes. Los tres juntos son {cop(full_user)} por usuario, {cop(full_user * team)} al mes. La sección 10 compara esa directriz con el mercado: un módulo cabe; los tres juntos quedan por encima de una suite que cobra una sola licencia. La VPS y el dominio los paga el cliente: la renovación del KVM 1 sale en {cop(kvm1_renew * 12)} al año.",
                 False,
             )
         ],
@@ -1260,11 +1260,82 @@ def build():
         size=8,
         header_size=8,
     )
+    add_subheading(doc, "10.1. Viabilidad de los $20.000 por módulo")
     add_body(
         doc,
         [
             (
-                f"Cada módulo cuesta {cop(per_module)} por usuario al mes. Un solo módulo, para 30 usuarios, son {cop(per_module * team)}. Eso queda {cop(usd_to_cop(odoo_co_std * team) - per_module * team)} por debajo de la licencia regional de Odoo Standard para 30 usuarios, y la puesta en marcha de ese módulo va incluida. Los tres módulos juntos son {cop(full_user)} por usuario, {cop(full_user * team)} al mes para 30 personas. Esa suma queda {cop(full_user * team - usd_to_cop(odoo_co_std * team))} por encima de la sola licencia de Odoo, porque Odoo cobra una vez por todas las aplicaciones y RecoTime cobra cada módulo.",
+                "Esta tabla pone la directriz comercial al lado del mercado de la sección 9. Los pesos de las referencias en dólares son cálculo de este informe con la TRM de $3.181,74. «Viable» significa que el valor de RecoTime cabe en el orden de esa referencia. «Apretado» significa que el mercado publica algo más bajo para un producto más estrecho. «Alto» significa que la factura de RecoTime supera a una suite que cobra una sola vez.",
+                False,
+            )
+        ],
+    )
+    add_table(
+        doc,
+        ["Comparación", "Mercado", "RecoTime", "Lectura"],
+        [
+            [
+                "Un módulo frente a Odoo Standard en Colombia",
+                cop(usd_to_cop(odoo_co_std)) + " por usuario, solo licencia",
+                cop(per_module) + " por usuario, puesta en marcha incluida",
+                "Viable. Queda " + cop(usd_to_cop(odoo_co_std) - per_module) + " debajo.",
+            ],
+            [
+                "Un módulo, 30 usuarios, frente a Bitrix24 Professional",
+                cop(usd_to_cop(199)) + " al mes, tope de 100 usuarios",
+                cop(per_module * team) + " al mes",
+                "Viable. Mismo orden para un equipo de 30.",
+            ],
+            [
+                "Drive suelto frente a Zoho WorkDrive Team",
+                cop(usd_to_cop(4.50)) + " por usuario, solo archivos",
+                cop(per_module) + " por usuario",
+                "Apretado. WorkDrive publica menos y reparte más espacio.",
+            ],
+            [
+                "Drive suelto frente a SharePoint Plan 1",
+                cop(usd_to_cop(5)) + " por usuario",
+                cop(per_module) + " por usuario",
+                "Apretado. SharePoint es solo la intranet de archivos.",
+            ],
+            [
+                "Los tres módulos frente a Odoo Standard, 30 usuarios",
+                cop(usd_to_cop(odoo_co_std * team)) + " al mes, solo licencia",
+                cop(full_user * team) + " al mes",
+                "Alto. Odoo cobra una vez por todas las aplicaciones.",
+            ],
+            [
+                "Los tres módulos frente a Google Workspace Standard",
+                cop(google_standard_cop) + " por usuario en Colombia",
+                cop(full_user) + " por usuario",
+                "Cerca en la factura. Google da correo y 2 TB por persona.",
+            ],
+            [
+                "Cuota de 2 TB frente al KVM 1 de Hostinger",
+                "50 GB por " + cop(kvm1_renew * 12) + " al año",
+                "Cuota de software de 2 TB",
+                "El disco de esa VPS no alcanza para la cuota.",
+            ],
+        ],
+        [2500, 2400, 2400, 2300],
+        aligns=["left", "left", "left", "left"],
+        size=8,
+        header_size=8,
+    )
+    add_body(
+        doc,
+        [
+            (
+                f"La directriz de {cop(per_module)} por módulo es viable cuando el cliente compra uno. En 30 usuarios son {cop(per_module * team)} al mes, {cop(usd_to_cop(odoo_co_std * team) - per_module * team)} por debajo de la licencia regional de Odoo y en el mismo orden que Bitrix24 Professional. El Drive suelto queda por encima de Zoho WorkDrive y de SharePoint, que son solo archivos.",
+                False,
+            )
+        ],
+    )
+    add_body(
+        doc,
+        [
+            (
+                f"Los tres módulos juntos, {cop(full_user)} por usuario y {cop(full_user * team)} al mes en 30 personas, quedan {cop(full_user * team - usd_to_cop(odoo_co_std * team))} por encima de la sola licencia de Odoo. Esa suite cobra una vez y trae CRM, personas y archivos. RecoTime se defiende si el cliente valora la puesta en marcha incluida y puede empezar por un módulo. Si compara la factura de los tres contra Odoo o contra Bitrix24, el precio completo se ve alto.",
                 False,
             )
         ],
@@ -1659,7 +1730,7 @@ def build():
         doc,
         [
             (
-                "Confirmar cómo se explica la cuota de 2 TB: es el techo del Drive, y el KVM 1 de Hostinger, cuya renovación anual queda en $466.800, trae 50 GB de disco. Ningún plan de esa lista llega a 2 TB.",
+                "Leer la sección 10.1 antes de usar la tabla con un cliente: un módulo a $20.000 es viable frente a Odoo y Bitrix24; los tres juntos quedan altos frente a una suite de una sola licencia; la cuota de 2 TB no cabe en el disco de 50 GB del KVM 1.",
                 False,
             )
         ],
