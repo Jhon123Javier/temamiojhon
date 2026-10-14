@@ -553,7 +553,7 @@ def build():
             ),
             ("THE COMPANY DEV", True),
             (
-                " para aprobar la oferta. Las secciones 2 y 3 dicen para qué existe el sistema. La sección 9 trae el mercado. La sección 11 trae el precio. La sección 17 explica la parte social.",
+                " para aprobar la oferta. Las secciones 2 y 3 dicen para qué existe el sistema. La sección 9 trae el mercado. La sección 11 trae el precio. La sección 17 deja, en corto, la parte social frente a Fondo Emprender.",
                 False,
             ),
         ],
@@ -1850,82 +1850,34 @@ def build():
             )
         ],
     )
-    add_heading(doc, "17. PARTE SOCIAL DEL SERVICIO")
+    add_heading(doc, "17. PARTE SOCIAL")
     add_body(
         doc,
         [
             (
-                "RecoTime no liquida nómina, no reemplaza el área de gestión humana y no sustituye el reglamento interno de trabajo. La parte social está en dos registros que la operación ya necesita y que, en Colombia, además sostienen derechos del trabajador: la jornada, con el almuerzo y los descansos separados, y el chat interno, para que la orden de trabajo no viva en el teléfono personal.",
+                "Más adelante, RecoTime puede acompañar a un emprendimiento que busque o ya tenga recursos del Fondo Emprender del SENA. Esta versión no incluye ese trámite. El fondo, en su reglamento de 2026, financia por dos líneas: Crear, para una iniciativa nueva, y Fortalecimiento productivo, para un negocio ya registrado. En las dos mira ingresos, autoempleo y puestos de trabajo. Esos son los temas sociales que este servicio toca, y de forma leve.",
                 False,
             )
         ],
     )
-    add_subheading(doc, "17.1. La jornada, el almuerzo y los descansos")
-    add_body(
-        doc,
-        [
-            (
-                "El artículo 161 del Código Sustantivo del Trabajo, modificado por la Ley 2101 de 2021 y recogido por la Ley 2466 de 2025, fija la jornada ordinaria máxima. La Circular 101 de 2025 del Ministerio del Trabajo recuerda el calendario de esa ley: desde el 15 de julio de 2026 la jornada máxima ordinaria es de 42 horas semanales, distribuidas de común acuerdo en 5 o 6 días, con un día de descanso. Esa jornada es tiempo de trabajo efectivo.",
-                False,
-            )
-        ],
-    )
-    add_body(
-        doc,
-        [
-            (
-                "El artículo 167 del mismo código ordena distribuir las horas de cada jornada en al menos dos secciones, con un intermedio de descanso adaptado al trabajo y a las necesidades de los trabajadores. Ese intermedio no se computa en la jornada. El artículo 108 exige que el reglamento interno de trabajo fije las horas de entrada y salida, el tiempo de las comidas y los períodos de descanso.",
-                False,
-            )
-        ],
-    )
-    add_body(
-        doc,
-        [
-            (
-                "El módulo de asistencia guarda cinco tipos de marca: llegada, inicio de almuerzo, fin de almuerzo, descanso y salida. Cada marca tiene trabajador, fecha y hora. El almuerzo queda separado de los descansos y del tiempo entre la llegada y la salida. El trabajador consulta su línea. El supervisor ve el día en curso. La marca la registra la persona o el supervisor dentro de RecoTime. Con ese registro, la empresa puede contrastar el día contra el horario de su reglamento y separar el intermedio que el artículo 167 deja fuera de la jornada. RecoTime no calcula la nómina ni decide si una hora es extra: deja la evidencia para quien sí liquida.",
-                False,
-            )
-        ],
-    )
-    add_subheading(doc, "17.2. El chat interno y la desconexión laboral")
-    add_body(
-        doc,
-        [
-            (
-                "La Ley 2191 de 2022 regula la desconexión laboral. El artículo 3 la define como el derecho a no ser contactado, por cualquier medio, para asuntos de trabajo por fuera de la jornada, ni en vacaciones o descansos. El empleador debe abstenerse de dar órdenes fuera de esa jornada. El artículo 5 le exige una política de desconexión. El derecho empieza cuando termina la jornada. Hay cargos de dirección, confianza y manejo con un régimen propio, que la misma ley señala.",
-                False,
-            )
-        ],
-    )
-    add_body(
-        doc,
-        [
-            (
-                "El chat interno de RecoTime es el canal de la empresa. Un mensaje guarda autor, fecha, hora y el cliente o el área a la que pertenece. El hilo sigue en el sistema si la persona sale de la compañía. La orden deja de depender de un WhatsApp personal, que se borra, se mezcla con la vida privada y sigue disponible cuando la jornada ya terminó. Tener el chat dentro de RecoTime no cumple la Ley 2191 por sí solo. Le da a la empresa un lugar donde la instrucción queda fechada, para aplicar la política de desconexión sobre un canal de trabajo y no sobre el número personal del trabajador.",
-                False,
-            )
-        ],
-    )
-    add_subheading(doc, "17.3. Por qué conviene en esa área")
     add_table(
         doc,
-        ["Para quién", "Qué gana con el registro"],
+        ["Tema social", "En qué puede ayudar RecoTime"],
         [
             [
-                "El trabajador",
-                "Consulta su línea del día y el chat de su trabajo. El almuerzo y los descansos no se diluyen en un mensaje de «ya llegué». Puede pedir el dato sin reconstruir la semana.",
+                "Autoempleo y puestos de trabajo",
+                "La asistencia deja quién llegó, almorzó, descansó y salió. Sirve para ver el equipo que la iniciativa dice tener o retener.",
             ],
             [
-                "La empresa",
-                "Explica una jornada con marcas de fecha y hora, y explica la gestión de un cliente con el expediente y el chat interno. El reglamento y la política de desconexión tienen un soporte que se puede abrir.",
+                "Orden de la unidad productiva",
+                "El expediente del cliente y el chat interno dejan cómo se atiende el negocio, dentro de la empresa.",
             ],
             [
-                "Una revisión o una queja",
-                "El intermedio de descanso se distingue del tiempo de trabajo, que es la separación del artículo 167. La orden tiene autor y hora, que es el dato que la Ley 2191 pone en el centro.",
+                "Continuidad del emprendimiento",
+                "El Drive guarda actas, formatos y la gestión. Los 2 TB los entrega THE COMPANY DEV.",
             ],
         ],
-        [2200, 7400],
+        [2800, 6800],
         size=9,
         header_size=9,
     )
@@ -1933,7 +1885,7 @@ def build():
         doc,
         [
             (
-                "La parte social de RecoTime es ese registro compartido. Protege el tiempo de descanso porque lo hace visible, y protege la vida personal porque saca la orden de trabajo del teléfono particular. La obligación legal sigue en la empresa: el reglamento, la política de desconexión y la liquidación de la jornada no se delegan en el software.",
+                "La ayuda es de operación. La postulación, los indicadores ante el fondo y la condonación siguen a cargo de quien presente el plan.",
                 False,
             )
         ],
