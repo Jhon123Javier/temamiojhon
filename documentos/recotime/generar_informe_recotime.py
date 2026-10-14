@@ -522,7 +522,7 @@ def build():
     )
     add_body(
         doc,
-        [("CRM y ERP de gestión, con trazabilidad, asistencia e intranet Drive", True)],
+        [("Trazabilidad de clientes, chat interno, jornada e intranet Drive", True)],
         size=13,
         before=0,
         after=2,
@@ -548,51 +548,76 @@ def build():
         doc,
         [
             (
-                "Este informe presenta a la directiva el perfil de RecoTime, el sistema de ",
+                "Este informe define RecoTime, fija el alcance de esta versión y sostiene el precio contra tarifas públicas leídas el 14 de octubre de 2026. Lo usa la directiva de ",
                 False,
             ),
             ("THE COMPANY DEV", True),
             (
-                " que reúne el CRM y el ERP de gestión en una sola operación. Sirve para llevar clientes y procesos, la trazabilidad de cada trabajador, la asistencia del día y el módulo Drive, la intranet donde queda guardada la información de la empresa. También reúne los precios públicos de Odoo, Bitrix24, Google Workspace y Hostinger, y la lista que se propone aprobar: sistema completo o módulos sueltos.",
+                " para aprobar la oferta. Las secciones 2 y 3 dicen para qué existe el sistema. La sección 9 trae el mercado. La sección 11 trae el precio. La sección 17 explica la parte social.",
                 False,
             ),
         ],
     )
+    add_subheading(doc, "Qué es")
     add_body(
         doc,
         [
             (
-                "La propuesta comercial tiene tres modalidades, con la configuración y la capacitación incluidas: suscripción mensual, anualidad y licencia vitalicia. Los valores de RecoTime que aparecen desde la sección 11 son una recomendación de este informe. Los de la sección 9 son cifras leídas en páginas públicas el 14 de octubre de 2026, pasadas a pesos con la TRM de $3.181,74 de ese día.",
+                "RecoTime es el sistema de gestión de la empresa. El módulo 1 lleva la trazabilidad de la gestión de cada cliente y el chat interno de la compañía, junto con el ERP de áreas, cargos y procesos. El módulo 2 registra la jornada: llegada, almuerzo, descansos y salida. El módulo 3 es el Drive, la intranet de documentos. La nómina y la contabilidad quedan en el programa que la empresa ya use.",
                 False,
             )
         ],
     )
     add_table(
         doc,
-        ["CRM y ERP", "Asistencia", "Drive, 2 TB", "Por usuario"],
+        ["Módulo", "Qué queda registrado", "Por usuario al mes"],
         [
             [
-                "Clientes, procesos, áreas y el tablero de la operación.",
-                "Llegada, almuerzo, descansos y salida, persona por persona.",
-                "Intranet de la empresa. THE COMPANY DEV entrega 2 TB para toda la cuenta.",
-                "CRM y ERP $15.000. Asistencia $8.000. Drive $10.000. Los tres: $33.000.",
-            ]
+                "1. CRM y ERP de gestión",
+                "Expediente del cliente, chat interno, áreas, cargos, procesos y trazabilidad del trabajador.",
+                cop(price_crm),
+            ],
+            [
+                "2. Asistencia",
+                "Llegada, inicio y fin de almuerzo, descansos y salida, con fecha y hora.",
+                cop(price_attendance),
+            ],
+            [
+                "3. Drive",
+                "Intranet de documentos. THE COMPANY DEV entrega 2 TB para toda la cuenta.",
+                cop(price_drive),
+            ],
+            [
+                "Los tres",
+                "Suma de los módulos. Puesta en marcha y capacitación incluidas.",
+                cop(full_user),
+            ],
         ],
-        [2400, 2400, 2400, 2400],
-        size=10,
+        [2500, 5100, 2000],
+        aligns=["left", "left", "center"],
+        size=9,
+        header_size=9,
     )
+    add_subheading(doc, "Precio y límites")
     add_body(
         doc,
         [
             (
-                f"La directriz de $20.000 por módulo dejaba los tres en $60.000 por usuario, por encima de una suite que cobra una sola licencia. El precio que este informe recomienda es {cop(price_crm)} para CRM y ERP, {cop(price_attendance)} para asistencia y {cop(price_drive)} para Drive. Los tres juntos son {cop(full_user)} por usuario, {cop(full_user * team)} al mes en 30 personas. La licencia de Odoo Standard en Colombia queda en {cop(usd_to_cop(odoo_co_std))} por usuario. ",
+                f"Para 30 usuarios, los tres módulos son {cop(full_user * team)} al mes. La licencia de Odoo Standard en Colombia queda en {cop(usd_to_cop(odoo_co_std))} por usuario, sin implementación. La directriz de $20.000 por módulo sumaba $60.000 y dejaba el sistema completo por encima de esa licencia de una sola vez. El precio de esta tabla es el ajuste de la sección 10.1. Hay tres formas de pago: mensual, anualidad de 10 meses por 12, y licencia vitalicia de 22 mensualidades.",
                 False,
-            ),
+            )
+        ],
+    )
+    add_body(
+        doc,
+        [
             ("La VPS la coloca el cliente. ", True),
             (
-                f"La contrata, la paga, entrega el acceso y la renueva. El dominio también lo coloca el cliente. La mensualidad de RecoTime no incluye servidor. La renovación del KVM 1 de Hostinger sale en {cop(kvm1_renew * 12)} al año. Los 2 TB del Drive los entrega THE COMPANY DEV.",
+                f"La contrata, la paga, entrega el acceso y la renueva. El dominio también lo coloca el cliente. La mensualidad es solo el software. La renovación del KVM 1 de Hostinger, usada como referencia, sale en {cop(kvm1_renew * 12)} al año. Los 2 TB del Drive los entrega ",
                 False,
             ),
+            ("THE COMPANY DEV", True),
+            (", sí o sí, con ese módulo.", False),
         ],
     )
 
@@ -601,7 +626,7 @@ def build():
         doc,
         [
             (
-                "RecoTime es un CRM y un ERP de gestión al mismo tiempo. El CRM concentra clientes, contactos, oportunidades y el seguimiento comercial. El ERP de gestión ordena la operación: áreas, cargos, procesos y el trabajo del día. Las dos capas comparten las mismas personas, de modo que un cliente, un responsable y una actividad quedan en un solo historial.",
+                "RecoTime reúne la gestión de clientes, el chat interno de la empresa, la operación del equipo y la jornada. El CRM es el expediente de la gestión de cada cliente: quién lo atendió, qué se hizo, en qué estado quedó y qué se escribió en el chat interno. Cada cambio guarda usuario, fecha y hora. El ERP de gestión ordena áreas, cargos y procesos, y comparte las mismas personas del expediente.",
                 False,
             )
         ],
@@ -633,7 +658,7 @@ def build():
         doc,
         [
             (
-                "La contabilidad, la factura electrónica, la PILA y la liquidación de nómina permanecen en el programa contable de la empresa. RecoTime cubre la gestión comercial, la operación del equipo, la jornada y la intranet. Por eso se ofrece al lado de Alegra o Siigo, y se compara con Odoo, Bitrix24 y Google Workspace en el tramo que hoy una pyme termina pagando por partes.",
+                "La contabilidad, la factura electrónica, la PILA y la liquidación de nómina permanecen en el programa contable de la empresa. RecoTime cubre el expediente del cliente, el chat interno, la operación del equipo, la jornada y la intranet. Por eso se ofrece al lado de Alegra o Siigo, y se compara con Odoo, Bitrix24 y Google Workspace en el tramo que hoy una pyme termina pagando por partes.",
                 False,
             )
         ],
@@ -644,7 +669,7 @@ def build():
         doc,
         [
             (
-                "En RecoTime convertimos la operación diaria en un registro que gerencia puede abrir. Damos a la empresa el CRM para no perder el seguimiento de un cliente, el ERP de gestión para saber qué proceso está en curso, la asistencia para ver quién llegó, quién está en almuerzo y quién tomó un descanso, y el Drive para que la información de la empresa viva en un solo lugar. El supervisor corrige con el dato enfrente. El trabajador consulta su línea y las carpetas de su área.",
+                "RecoTime existe para que una empresa deje constancia de tres hechos que hoy se reconstruyen en chats personales y hojas sueltas: cómo se gestionó cada cliente, qué se dijo en el chat interno de la compañía y cómo fue la jornada de cada trabajador. El expediente del cliente guarda responsable, estado, fecha y hora. El chat interno guarda autor, fecha y hora, y permanece en el sistema cuando una persona deja la empresa. La asistencia separa llegada, almuerzo, descansos y salida. El Drive guarda los documentos de esa gestión. La empresa consulta el expediente. El trabajador consulta su línea del día y el chat de su trabajo. La nómina y la contabilidad siguen en el programa que la empresa ya tenga.",
                 False,
             )
         ],
@@ -655,7 +680,7 @@ def build():
         doc,
         [
             (
-                "En 2030, RecoTime será la plataforma de referencia en Colombia para las empresas que quieren el comercial y la jornada del equipo en el mismo lugar. Queremos ser reconocidos porque la trazabilidad del trabajador sirve para explicar una entrega, y porque la asistencia del día se entiende en una pantalla, con llegada, almuerzo y descansos, sin armar el reporte a mano al cierre de la semana.",
+                "En 2030, una empresa que use RecoTime debe poder abrir el expediente de un cliente y ver quién lo gestionó, qué se acordó en el chat interno y en qué estado quedó, y debe poder abrir el día de un trabajador y ver la llegada, el almuerzo, los descansos y la salida sin armar el reporte a mano. Esa es la meta, medida en consultas que hoy no existen en un solo sistema. El lugar que RecoTime busca es el de las pymes colombianas de 8 a 80 trabajadores que ya liquidan nómina y contabilidad en otro programa. El criterio de avance es concreto: la orden de trabajo y el historial del cliente viven en RecoTime, y el teléfono personal deja de ser el archivo de la empresa.",
                 False,
             )
         ],
@@ -669,7 +694,7 @@ def build():
             ["Claridad", "Gerencia ve clientes, procesos y la jornada en el mismo sistema."],
             ["Trazabilidad", "Cada actividad guarda persona, asignación, hora y estado."],
             ["Respeto del tiempo", "La llegada, el almuerzo y los descansos quedan visibles y separados."],
-            ["Orden comercial", "El seguimiento de un cliente tiene dueño, etapa y próxima acción."],
+            ["Expediente del cliente", "Cada gestión guarda responsable, estado, fecha, hora y el hilo del chat interno."],
             ["Acompañamiento", "La puesta en marcha y la capacitación por rol van en el precio."],
             ["Memoria de la empresa", "El Drive guarda la gestión en carpetas, con una cuota de 2 TB para la cuenta."],
         ],
@@ -681,7 +706,7 @@ def build():
         doc,
         [
             (
-                "Cuando los clientes viven en un chat, la asignación del equipo en una hoja y la asistencia en otro mensaje, gerencia reconstruye el día después de que pasó. RecoTime ordena ese recorrido así:",
+                "Cuando la gestión de un cliente vive en el WhatsApp de quien lo atendió, la orden del equipo en otro chat personal y la asistencia en un mensaje de «ya llegué», gerencia reconstruye el día después de que pasó. RecoTime separa esos registros así:",
                 False,
             )
         ],
@@ -691,8 +716,8 @@ def build():
         ["Hoy, sin RecoTime", "Con RecoTime"],
         [
             [
-                "El seguimiento comercial está en chats, hojas y la memoria del vendedor.",
-                "CRM con clientes, oportunidades, etapa y responsable.",
+                "La gestión del cliente está en el chat personal de quien lo atendió.",
+                "Expediente del cliente: responsable, estado, fecha, hora e historial.",
             ],
             [
                 "Nadie sabe con certeza qué trabajador atendió qué proceso.",
@@ -707,8 +732,8 @@ def build():
                 "El supervisor abre el día en curso y ve las marcas ya registradas.",
             ],
             [
-                "CRM, tareas y asistencia se pagan por separado y no conversan.",
-                "Una operación, un usuario por persona y un historial compartido.",
+                "Las órdenes del equipo se escriben en el teléfono personal.",
+                "Chat interno de la empresa: autor, fecha, hora, cliente o área.",
             ],
             [
                 "Los manuales y las actas viven en chats, correos y carpetas sueltas.",
@@ -724,7 +749,7 @@ def build():
         doc,
         [
             (
-                "Pymes de servicios, operación y equipos de sede que necesitan CRM y, al mismo tiempo, ver la jornada de su gente.",
+                "Pymes de servicios y operación que necesitan el expediente de cada cliente, un chat interno de la empresa y la jornada del equipo en el mismo sistema.",
                 False,
             )
         ],
@@ -762,7 +787,7 @@ def build():
         doc,
         [
             (
-                "RecoTime tiene cuatro accesos. Cada persona entra con su usuario y su rol: gerencia, comercial, supervisor y trabajador.",
+                "RecoTime tiene cuatro accesos. Cada persona entra con su usuario y su rol: gerencia, gestión de clientes, supervisor y trabajador. El chat interno está disponible para los roles que la empresa habilite. Un mensaje no sale del sistema hacia el teléfono personal.",
                 False,
             )
         ],
@@ -773,11 +798,11 @@ def build():
         [
             [
                 "Gerencia",
-                "Ve el tablero, el avance del CRM, la asistencia del día y las carpetas del Drive.",
+                "Ve el tablero, el expediente de los clientes, el chat interno, la asistencia del día y el Drive.",
             ],
             [
-                "Comercial",
-                "Registra clientes, contactos y oportunidades. Deja la próxima acción y el responsable.",
+                "Gestión de clientes",
+                "Actualiza el expediente: responsable, estado y lo tratado. Escribe en el chat interno del cliente o del área.",
             ],
             [
                 "Supervisor",
@@ -803,10 +828,35 @@ def build():
         doc,
         [
             (
-                "La trazabilidad corre en paralelo. Una actividad se abre con trabajador, cliente o proceso, hora de inicio y estado. Al cerrarla, queda la hora de fin. Gerencia puede abrir a una persona y ver, en el mismo expediente, qué atendió y cómo fue su día.",
+                "La trazabilidad del trabajador corre en paralelo. Una actividad se abre con trabajador, cliente o proceso, hora de inicio y estado. Al cerrarla, queda la hora de fin. Gerencia puede abrir a una persona y ver qué atendió y cómo fue su día.",
                 False,
             )
         ],
+    )
+
+    add_subheading(doc, "Qué guarda cada registro")
+    add_body(
+        doc,
+        [
+            (
+                "Esta versión no publica una base de datos ni una interfaz de programación. Sí fija qué dato mínimo queda en cada registro, para que la puesta en marcha y los reportes hablen de los mismos campos.",
+                False,
+            )
+        ],
+    )
+    add_table(
+        doc,
+        ["Registro", "Campos que quedan"],
+        [
+            ["Expediente del cliente", "Cliente, responsable, estado de la gestión, fecha y hora de cada cambio."],
+            ["Mensaje del chat interno", "Autor, fecha, hora, cliente o área, y el texto. El hilo queda en la empresa."],
+            ["Actividad del trabajador", "Trabajador, cliente o proceso, hora de inicio, hora de fin y estado."],
+            ["Marca de asistencia", "Trabajador, tipo de marca, fecha y hora. Los tipos son llegada, inicio de almuerzo, fin de almuerzo, descanso y salida."],
+            ["Documento del Drive", "Archivo, carpeta de área y rol que puede verlo. La cuota de la cuenta es de 2 TB."],
+        ],
+        [2800, 6800],
+        size=9,
+        header_size=9,
     )
 
     add_heading(doc, "8. ALCANCE DE ESTA VERSIÓN")
@@ -816,7 +866,7 @@ def build():
         [
             [
                 "1. CRM y ERP de gestión",
-                "Clientes, contactos, oportunidades y seguimiento. Áreas, cargos, procesos y tablero. Trazabilidad del trabajador: ficha, asignación, actividad y estado. Reportes de la operación.",
+                "Expediente del cliente: responsable, estado, fecha y hora de cada cambio. Chat interno por cliente y por área, con autor, fecha y hora. Áreas, cargos, procesos y tablero. Trazabilidad del trabajador: ficha, asignación, actividad y estado. Reportes de la operación.",
             ],
             [
                 "2. Asistencia",
@@ -1600,7 +1650,7 @@ def build():
         doc,
         ["Proceso", "RecoTime, esta versión", "Dónde aparece en el mercado citado"],
         [
-            ["CRM, ERP y trazabilidad", "Módulo 1, suelto o con los demás", "Odoo, Bitrix24, Zoho CRM y HubSpot."],
+            ["Expediente del cliente y chat interno", "Módulo 1, suelto o con los demás", "Odoo y Zoho CRM llevan el cliente. Bitrix24 suma el chat de la empresa en el mismo producto."],
             ["Llegada, almuerzo, descansos y salida", "Módulo 2, suelto o con los demás", "Odoo Asistencias, Zoho People y Factorial."],
             ["Drive, intranet de 2 TB por cuenta", "Módulo 3, suelto o con los demás", "Google Workspace, Zoho WorkDrive y SharePoint."],
             ["Puesta en marcha y capacitación", "Incluidas", "En Odoo, Bitrix24, HubSpot y Business Central la implementación va aparte o se cotiza."],
@@ -1760,7 +1810,7 @@ def build():
         doc,
         [
             (
-                f"Confirmar el reparto: el módulo 1 reúne CRM, ERP de gestión y trazabilidad; el módulo 2 es la asistencia; el módulo 3 es el Drive. Para 30 usuarios, el CRM y ERP son {cop(price_crm * team)} al mes y los tres módulos son {cop(full_user * team)}.",
+                f"Confirmar el reparto: el módulo 1 es la trazabilidad de la gestión de clientes, el chat interno y el ERP de áreas y procesos; el módulo 2 es la asistencia; el módulo 3 es el Drive. Para 30 usuarios, el módulo 1 son {cop(price_crm * team)} al mes y los tres módulos son {cop(full_user * team)}.",
                 False,
             )
         ],
@@ -1800,6 +1850,95 @@ def build():
             )
         ],
     )
+    add_heading(doc, "17. PARTE SOCIAL DEL SERVICIO")
+    add_body(
+        doc,
+        [
+            (
+                "RecoTime no liquida nómina, no reemplaza el área de gestión humana y no sustituye el reglamento interno de trabajo. La parte social está en dos registros que la operación ya necesita y que, en Colombia, además sostienen derechos del trabajador: la jornada, con el almuerzo y los descansos separados, y el chat interno, para que la orden de trabajo no viva en el teléfono personal.",
+                False,
+            )
+        ],
+    )
+    add_subheading(doc, "17.1. La jornada, el almuerzo y los descansos")
+    add_body(
+        doc,
+        [
+            (
+                "El artículo 161 del Código Sustantivo del Trabajo, modificado por la Ley 2101 de 2021 y recogido por la Ley 2466 de 2025, fija la jornada ordinaria máxima. La Circular 101 de 2025 del Ministerio del Trabajo recuerda el calendario de esa ley: desde el 15 de julio de 2026 la jornada máxima ordinaria es de 42 horas semanales, distribuidas de común acuerdo en 5 o 6 días, con un día de descanso. Esa jornada es tiempo de trabajo efectivo.",
+                False,
+            )
+        ],
+    )
+    add_body(
+        doc,
+        [
+            (
+                "El artículo 167 del mismo código ordena distribuir las horas de cada jornada en al menos dos secciones, con un intermedio de descanso adaptado al trabajo y a las necesidades de los trabajadores. Ese intermedio no se computa en la jornada. El artículo 108 exige que el reglamento interno de trabajo fije las horas de entrada y salida, el tiempo de las comidas y los períodos de descanso.",
+                False,
+            )
+        ],
+    )
+    add_body(
+        doc,
+        [
+            (
+                "El módulo de asistencia guarda cinco tipos de marca: llegada, inicio de almuerzo, fin de almuerzo, descanso y salida. Cada marca tiene trabajador, fecha y hora. El almuerzo queda separado de los descansos y del tiempo entre la llegada y la salida. El trabajador consulta su línea. El supervisor ve el día en curso. La marca la registra la persona o el supervisor dentro de RecoTime. Con ese registro, la empresa puede contrastar el día contra el horario de su reglamento y separar el intermedio que el artículo 167 deja fuera de la jornada. RecoTime no calcula la nómina ni decide si una hora es extra: deja la evidencia para quien sí liquida.",
+                False,
+            )
+        ],
+    )
+    add_subheading(doc, "17.2. El chat interno y la desconexión laboral")
+    add_body(
+        doc,
+        [
+            (
+                "La Ley 2191 de 2022 regula la desconexión laboral. El artículo 3 la define como el derecho a no ser contactado, por cualquier medio, para asuntos de trabajo por fuera de la jornada, ni en vacaciones o descansos. El empleador debe abstenerse de dar órdenes fuera de esa jornada. El artículo 5 le exige una política de desconexión. El derecho empieza cuando termina la jornada. Hay cargos de dirección, confianza y manejo con un régimen propio, que la misma ley señala.",
+                False,
+            )
+        ],
+    )
+    add_body(
+        doc,
+        [
+            (
+                "El chat interno de RecoTime es el canal de la empresa. Un mensaje guarda autor, fecha, hora y el cliente o el área a la que pertenece. El hilo sigue en el sistema si la persona sale de la compañía. La orden deja de depender de un WhatsApp personal, que se borra, se mezcla con la vida privada y sigue disponible cuando la jornada ya terminó. Tener el chat dentro de RecoTime no cumple la Ley 2191 por sí solo. Le da a la empresa un lugar donde la instrucción queda fechada, para aplicar la política de desconexión sobre un canal de trabajo y no sobre el número personal del trabajador.",
+                False,
+            )
+        ],
+    )
+    add_subheading(doc, "17.3. Por qué conviene en esa área")
+    add_table(
+        doc,
+        ["Para quién", "Qué gana con el registro"],
+        [
+            [
+                "El trabajador",
+                "Consulta su línea del día y el chat de su trabajo. El almuerzo y los descansos no se diluyen en un mensaje de «ya llegué». Puede pedir el dato sin reconstruir la semana.",
+            ],
+            [
+                "La empresa",
+                "Explica una jornada con marcas de fecha y hora, y explica la gestión de un cliente con el expediente y el chat interno. El reglamento y la política de desconexión tienen un soporte que se puede abrir.",
+            ],
+            [
+                "Una revisión o una queja",
+                "El intermedio de descanso se distingue del tiempo de trabajo, que es la separación del artículo 167. La orden tiene autor y hora, que es el dato que la Ley 2191 pone en el centro.",
+            ],
+        ],
+        [2200, 7400],
+        size=9,
+        header_size=9,
+    )
+    add_body(
+        doc,
+        [
+            (
+                "La parte social de RecoTime es ese registro compartido. Protege el tiempo de descanso porque lo hace visible, y protege la vida personal porque saca la orden de trabajo del teléfono particular. La obligación legal sigue en la empresa: el reglamento, la política de desconexión y la liquidación de la jornada no se delegan en el software.",
+                False,
+            )
+        ],
+    )
+
     add_body(
         doc,
         [("Elaborado por", True)],
