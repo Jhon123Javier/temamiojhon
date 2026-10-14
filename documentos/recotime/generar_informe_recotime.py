@@ -470,9 +470,14 @@ def build():
     odoo_us_custom_month = 76.20
     odoo_light = 8.90
     team = 30
-    per_module = 20000
-    module_count = 3
-    full_user = per_module * module_count
+    # La directriz de $20.000 por módulo sumaba $60.000 y quedaba por
+    # encima de una suite de una sola licencia. Cada módulo queda ahora
+    # en el orden de su referencia: Odoo para la gestión, Factorial para
+    # la jornada y WorkDrive o SharePoint para el archivo.
+    price_crm = 15000
+    price_attendance = 8000
+    price_drive = 10000
+    full_user = price_crm + price_attendance + price_drive
     google_standard_cop = 58400
     kvm1_offer = 19900
     kvm1_renew = 38900
@@ -570,7 +575,7 @@ def build():
                 "Clientes, procesos, áreas y el tablero de la operación.",
                 "Llegada, almuerzo, descansos y salida, persona por persona.",
                 "Intranet de la empresa. Cuota de 2 TB para toda la cuenta.",
-                "Cada módulo: $20.000 por usuario. Los tres juntos: $60.000.",
+                "CRM y ERP $15.000. Asistencia $8.000. Drive $10.000. Los tres: $33.000.",
             ]
         ],
         [2400, 2400, 2400, 2400],
@@ -580,9 +585,14 @@ def build():
         doc,
         [
             (
-                f"La directriz es cobrar {cop(per_module)} por usuario activo al mes en cada módulo. Son tres: CRM y ERP de gestión, asistencia, y Drive. Un módulo, en 30 usuarios, son {cop(per_module * team)} al mes. Los tres juntos son {cop(full_user)} por usuario, {cop(full_user * team)} al mes. La sección 10 compara esa directriz con el mercado: un módulo cabe; los tres juntos quedan por encima de una suite que cobra una sola licencia. La VPS y el dominio los paga el cliente: la renovación del KVM 1 sale en {cop(kvm1_renew * 12)} al año.",
+                f"La directriz de $20.000 por módulo dejaba los tres en $60.000 por usuario, por encima de una suite que cobra una sola licencia. El precio que este informe recomienda es {cop(price_crm)} para CRM y ERP, {cop(price_attendance)} para asistencia y {cop(price_drive)} para Drive. Los tres juntos son {cop(full_user)} por usuario, {cop(full_user * team)} al mes en 30 personas. La licencia de Odoo Standard en Colombia queda en {cop(usd_to_cop(odoo_co_std))} por usuario. ",
                 False,
-            )
+            ),
+            ("La VPS la coloca el cliente. ", True),
+            (
+                f"La contrata, la paga, entrega el acceso y la renueva. El dominio también lo coloca el cliente. La mensualidad de RecoTime no incluye servidor. La renovación del KVM 1 de Hostinger sale en {cop(kvm1_renew * 12)} al año y trae 50 GB de disco.",
+                False,
+            ),
         ],
     )
 
@@ -829,7 +839,7 @@ def build():
         doc,
         [
             (
-                "Esta versión deja para una cotización posterior la nómina, la PILA, la nómina electrónica ante la DIAN, la factura electrónica, la contabilidad, el inventario, las compras y el POS. También se cotizan el reloj o el biométrico, la publicación en Play Store o App Store, varias sedes, el espacio por encima de la cuota de 2 TB y el consumo de WhatsApp. Las marcas de esta versión las registra el trabajador o el supervisor dentro de RecoTime. La VPS y el dominio no se cotizan aquí: los contrata el cliente.",
+                "Esta versión deja para una cotización posterior la nómina, la PILA, la nómina electrónica ante la DIAN, la factura electrónica, la contabilidad, el inventario, las compras y el POS. También se cotizan el reloj o el biométrico, la publicación en Play Store o App Store, varias sedes, el espacio por encima de la cuota de 2 TB y el consumo de WhatsApp. Las marcas de esta versión las registra el trabajador o el supervisor dentro de RecoTime. La VPS y el dominio no se cotizan aquí: los coloca el cliente.",
                 False,
             )
         ],
@@ -1191,7 +1201,7 @@ def build():
     )
     add_note(
         doc,
-        "Renovación al año = renovación al mes × 12, cálculo de este informe. KVM 1 se renueva en $466.800 al año. Es la cifra que se acerca a los $500.000 al año que la operación usa como referencia de la VPS. La oferta del primer periodo, a $19.900 al mes, son $238.800 si se mantienen doce meses. Hostinger puede cambiar la campaña. El dominio no va en esta tabla: lo contrata el cliente, y el precio depende de la extensión.",
+        "Renovación al año = renovación al mes × 12, cálculo de este informe. KVM 1 se renueva en $466.800 al año. Es la cifra que se acerca a los $500.000 al año que la operación usa como referencia. La oferta del primer periodo, a $19.900 al mes, son $238.800 si se mantienen doce meses. Hostinger puede cambiar la campaña. Esta tabla es referencia: la VPS la coloca el cliente y no se factura dentro de RecoTime. El dominio tampoco va aquí.",
     )
 
     add_heading(doc, "10. LECTURA PARA RECOTIME")
@@ -1205,6 +1215,16 @@ def build():
         ],
     )
     rows_30 = [
+        (
+            "RecoTime, los tres módulos",
+            cop(full_user * team),
+            f"30 × {cop(full_user)}. Puesta en marcha incluida. La VPS la coloca el cliente.",
+        ),
+        (
+            "RecoTime, solo CRM y ERP",
+            cop(price_crm * team),
+            f"30 × {cop(price_crm)}. Asistencia y Drive se suman si el cliente los toma.",
+        ),
         (
             "Odoo Standard, tarifa Colombia",
             cop(usd_to_cop(odoo_co_std * team)),
@@ -1260,64 +1280,66 @@ def build():
         size=8,
         header_size=8,
     )
-    add_subheading(doc, "10.1. Viabilidad de los $20.000 por módulo")
+    bitrix_pro_month = usd_to_cop(199)
+    users_under_bitrix = int(bitrix_pro_month // full_user)
+    add_subheading(doc, "10.1. Precio acoplado al mercado")
     add_body(
         doc,
         [
             (
-                "Esta tabla pone la directriz comercial al lado del mercado de la sección 9. Los pesos de las referencias en dólares son cálculo de este informe con la TRM de $3.181,74. «Viable» significa que el valor de RecoTime cabe en el orden de esa referencia. «Apretado» significa que el mercado publica algo más bajo para un producto más estrecho. «Alto» significa que la factura de RecoTime supera a una suite que cobra una sola vez.",
+                "La directriz de $20.000 por módulo sumaba $60.000 por usuario. Para 30 personas eso eran $1.800.000 al mes, por encima de la licencia de Odoo Standard en Colombia. El ajuste deja cada módulo en el orden de su propia referencia y los tres juntos entre las dos licencias de Odoo. Los pesos de las referencias en dólares son cálculo de este informe con la TRM de $3.181,74. La puesta en marcha va incluida en estos valores. La VPS no va: la coloca el cliente.",
                 False,
             )
         ],
     )
     add_table(
         doc,
-        ["Comparación", "Mercado", "RecoTime", "Lectura"],
+        ["Pieza", "Referencia de mercado", "RecoTime", "Lectura"],
         [
             [
-                "Un módulo frente a Odoo Standard en Colombia",
-                cop(usd_to_cop(odoo_co_std)) + " por usuario, solo licencia",
-                cop(per_module) + " por usuario, puesta en marcha incluida",
-                "Viable. Queda " + cop(usd_to_cop(odoo_co_std) - per_module) + " debajo.",
+                "CRM y ERP de gestión",
+                "Odoo Standard, Colombia: " + cop(usd_to_cop(odoo_co_std)) + " por usuario, solo licencia",
+                cop(price_crm) + " por usuario, puesta en marcha incluida",
+                "Cabe. " + cop(usd_to_cop(odoo_co_std) - price_crm) + " por debajo de esa licencia.",
             ],
             [
-                "Un módulo, 30 usuarios, frente a Bitrix24 Professional",
-                cop(usd_to_cop(199)) + " al mes, tope de 100 usuarios",
-                cop(per_module * team) + " al mes",
-                "Viable. Mismo orden para un equipo de 30.",
+                "Asistencia",
+                "Factorial desde " + cop(usd_to_cop(8)) + " por usuario. El tiempo se cotiza encima.",
+                cop(price_attendance) + " por usuario",
+                "Cabe. Cubre llegada, almuerzo, descansos y salida.",
             ],
             [
-                "Drive suelto frente a Zoho WorkDrive Team",
-                cop(usd_to_cop(4.50)) + " por usuario, solo archivos",
-                cop(per_module) + " por usuario",
-                "Apretado. WorkDrive publica menos y reparte más espacio.",
+                "Drive",
+                "WorkDrive Team " + cop(usd_to_cop(4.50)) + ". SharePoint Plan 1 " + cop(usd_to_cop(5)) + ".",
+                cop(price_drive) + " por usuario",
+                "Cabe. Por debajo de las dos referencias de archivos.",
             ],
             [
-                "Drive suelto frente a SharePoint Plan 1",
-                cop(usd_to_cop(5)) + " por usuario",
-                cop(per_module) + " por usuario",
-                "Apretado. SharePoint es solo la intranet de archivos.",
-            ],
-            [
-                "Los tres módulos frente a Odoo Standard, 30 usuarios",
-                cop(usd_to_cop(odoo_co_std * team)) + " al mes, solo licencia",
-                cop(full_user * team) + " al mes",
-                "Alto. Odoo cobra una vez por todas las aplicaciones.",
-            ],
-            [
-                "Los tres módulos frente a Google Workspace Standard",
-                cop(google_standard_cop) + " por usuario en Colombia",
+                "Los tres módulos",
+                "Odoo Standard " + cop(usd_to_cop(odoo_co_std)) + ". Personalizado de primer año " + cop(usd_to_cop(odoo_co_custom_first)) + ".",
                 cop(full_user) + " por usuario",
-                "Cerca en la factura. Google da correo y 2 TB por persona.",
+                "Cabe entre las dos licencias. La puesta en marcha va incluida.",
             ],
             [
-                "Cuota de 2 TB frente al KVM 1 de Hostinger",
-                "50 GB por " + cop(kvm1_renew * 12) + " al año",
-                "Cuota de software de 2 TB",
-                "El disco de esa VPS no alcanza para la cuota.",
+                "30 usuarios, los tres",
+                "Odoo Standard " + cop(usd_to_cop(odoo_co_std * team)) + " al mes, solo licencia",
+                cop(full_user * team) + " al mes",
+                cop(full_user * team - usd_to_cop(odoo_co_std * team)) + " de diferencia. En Odoo la implementación se paga aparte.",
+            ],
+            [
+                "30 usuarios frente a Bitrix24 Professional",
+                cop(bitrix_pro_month) + " al mes, tope de 100 usuarios",
+                cop(full_user * team) + " al mes",
+                "Bitrix cobra un fijo. Hasta " + str(users_under_bitrix) + " usuarios, RecoTime completo queda más bajo.",
+            ],
+            [
+                "VPS y dominio",
+                "KVM 1: 50 GB por " + cop(kvm1_renew * 12) + " al año",
+                "Fuera de la mensualidad",
+                "Los coloca el cliente. La cuota de 2 TB no amplía ese disco.",
             ],
         ],
-        [2500, 2400, 2400, 2300],
+        [2100, 2800, 2500, 2200],
         aligns=["left", "left", "left", "left"],
         size=8,
         header_size=8,
@@ -1326,7 +1348,7 @@ def build():
         doc,
         [
             (
-                f"La directriz de {cop(per_module)} por módulo es viable cuando el cliente compra uno. En 30 usuarios son {cop(per_module * team)} al mes, {cop(usd_to_cop(odoo_co_std * team) - per_module * team)} por debajo de la licencia regional de Odoo y en el mismo orden que Bitrix24 Professional. El Drive suelto queda por encima de Zoho WorkDrive y de SharePoint, que son solo archivos.",
+                f"El Drive queda en {cop(price_drive)} por usuario. Zoho WorkDrive Team, solo archivos, equivale a {cop(usd_to_cop(4.50))} por usuario. SharePoint Plan 1 equivale a {cop(usd_to_cop(5))}. Google Workspace Business Standard, en la lista de Colombia, cuesta {cop(google_standard_cop)} por usuario e incluye correo, documentos y 2 TB por persona. Los tres módulos de RecoTime juntos son {cop(full_user)} por usuario. El Drive de RecoTime es una intranet de 2 TB para toda la cuenta, no 2 TB por cabeza.",
                 False,
             )
         ],
@@ -1335,27 +1357,14 @@ def build():
         doc,
         [
             (
-                f"Los tres módulos juntos, {cop(full_user)} por usuario y {cop(full_user * team)} al mes en 30 personas, quedan {cop(full_user * team - usd_to_cop(odoo_co_std * team))} por encima de la sola licencia de Odoo. Esa suite cobra una vez y trae CRM, personas y archivos. RecoTime se defiende si el cliente valora la puesta en marcha incluida y puede empezar por un módulo. Si compara la factura de los tres contra Odoo o contra Bitrix24, el precio completo se ve alto.",
+                f"La mensualidad no incluye servidor. La VPS la coloca el cliente: la contrata en Hostinger, la paga, entrega el acceso a ",
                 False,
-            )
-        ],
-    )
-    add_body(
-        doc,
-        [
+            ),
+            ("THE COMPANY DEV", True),
             (
-                f"El Drive, como módulo suelto, queda en {cop(per_module)} por usuario. Zoho WorkDrive Team, solo archivos, equivale a {cop(usd_to_cop(4.50))} por usuario. SharePoint Plan 1 equivale a {cop(usd_to_cop(5))}. Google Workspace Business Standard, en la lista de Colombia, cuesta {cop(google_standard_cop)} por usuario, casi el valor de los tres módulos de RecoTime juntos ({cop(full_user)}), e incluye 2 TB por persona, correo y documentos. El Drive de RecoTime entrega una intranet de 2 TB para toda la cuenta, no 2 TB por cabeza.",
+                f" y la renueva. El dominio también lo coloca el cliente. La instalación de RecoTime se hace en esa VPS y no se factura como hosting. La referencia de $500.000 al año corresponde a la renovación del KVM 1, {cop(kvm1_renew * 12)}. Ese plan trae 50 GB de disco. La cuota de 2 TB del Drive es el techo del software. El espacio usable es el disco de la VPS que el cliente haya colocado.",
                 False,
-            )
-        ],
-    )
-    add_body(
-        doc,
-        [
-            (
-                f"La VPS no entra en los {cop(per_module)} de cada módulo. El cliente la paga a Hostinger y también pone el dominio. La referencia de $500.000 al año corresponde a la renovación del KVM 1, {cop(kvm1_renew * 12)}. Ese plan trae 50 GB de disco. La cuota de 2 TB del Drive es el techo del software. Mientras el disco de la VPS sea menor, el espacio usable es el del disco.",
-                False,
-            )
+            ),
         ],
     )
 
@@ -1375,7 +1384,7 @@ def build():
         doc,
         [
             (
-                "RecoTime se ofrece en tres modalidades y en dos formas de armar el alcance: el sistema completo o los módulos sueltos. En ninguna modalidad se cobra una implementación aparte. La configuración, la puesta en marcha y la capacitación por rol están incluidas. El precio es por usuario activo al mes. La VPS de Hostinger y el dominio los contrata el cliente y no van dentro de estos valores.",
+                "RecoTime se ofrece en tres modalidades y por módulos. En ninguna modalidad se cobra una implementación aparte. La configuración, la puesta en marcha y la capacitación por rol están incluidas. El precio es por usuario activo al mes y es la suma de los módulos que el cliente tome. La VPS no entra en ese precio: la coloca el cliente. También coloca el dominio.",
                 False,
             )
         ],
@@ -1389,7 +1398,7 @@ def build():
             ["Uso del sistema", "Mientras pague", "12 meses", "Indefinido, versión entregada"],
             ["Soporte de 3 h/mes", "Incluido", "Incluido", "3 meses; luego plan opcional"],
             ["Actualizaciones", "Incluidas", "Incluidas", "Con el plan de soporte"],
-            ["VPS, disco y dominio", "Del cliente", "Del cliente", "Del cliente"],
+            ["VPS, disco y dominio", "Los coloca el cliente", "Los coloca el cliente", "Los coloca el cliente"],
             ["Cuota Drive", "2 TB por cuenta", "2 TB por cuenta", "2 TB por cuenta"],
             ["Código fuente", "THE COMPANY DEV", "THE COMPANY DEV", "THE COMPANY DEV"],
             ["Beneficio", "1 mes gratis por año cumplido", "Se pagan 10 meses y se usan 12", "Sin canon de licencia"],
@@ -1400,53 +1409,12 @@ def build():
         header_size=8,
     )
 
-    add_subheading(doc, "11.1. Precio por módulo")
+    add_subheading(doc, "11.1. Precio de cada módulo")
     add_body(
         doc,
         [
             (
-                f"Cada módulo cuesta {cop(per_module)} por usuario activo al mes. Los tres juntos cuestan {cop(full_user)} por usuario: es la suma, sin un descuento aparte. Quien toma un módulo paga {cop(per_module)}. Quien toma los tres paga {cop(full_user)}.",
-                False,
-            )
-        ],
-    )
-    add_table(
-        doc,
-        ["Forma", "Por usuario al mes", "Anualidad por usuario", "Vitalicia por usuario"],
-        [
-            [
-                "Un módulo",
-                cop(per_module),
-                cop(per_module * 10),
-                cop(per_module * 22),
-            ],
-            [
-                "Dos módulos",
-                cop(per_module * 2),
-                cop(per_module * 2 * 10),
-                cop(per_module * 2 * 22),
-            ],
-            [
-                "Los tres módulos",
-                cop(full_user),
-                cop(full_user * 10),
-                cop(full_user * 22),
-            ],
-        ],
-        [2400, 2400, 2400, 2400],
-        aligns=["left", "center", "center", "center"],
-    )
-    add_note(
-        doc,
-        "Anualidad por usuario = mensualidad × 10, y cubre 12 meses. Un módulo al año son $200.000 por usuario, equivalentes a $16.667 al mes. Los tres módulos al año son $600.000 por usuario. La vitalicia es la mensualidad × 22: $440.000 por usuario en un módulo y $1.320.000 en los tres. El soporte opcional, después de los 3 meses de garantía, es el 40 % de lo que el cliente paga por usuario.",
-    )
-
-    add_subheading(doc, "11.2. Los tres módulos, sueltos o juntos")
-    add_body(
-        doc,
-        [
-            (
-                "El precio de cada módulo es el mismo. El cliente elige uno, dos o los tres. Los reportes de cada módulo van con ese módulo. La cuota de 2 TB va solo con el Drive, así se compre suelto o con los demás.",
+                f"Cada módulo tiene su propio valor, tomado del orden de mercado de la sección 10.1. Los tres juntos cuestan {cop(full_user)} por usuario: es la suma. Quien toma un módulo paga ese módulo. Quien toma dos paga la suma de esos dos.",
                 False,
             )
         ],
@@ -1455,9 +1423,9 @@ def build():
         doc,
         ["Módulo", "Por usuario al mes", "Anualidad por usuario", "Vitalicia por usuario"],
         [
-            ["1. CRM y ERP de gestión", cop(per_module), cop(per_module * 10), cop(per_module * 22)],
-            ["2. Asistencia", cop(per_module), cop(per_module * 10), cop(per_module * 22)],
-            ["3. Drive", cop(per_module), cop(per_module * 10), cop(per_module * 22)],
+            ["1. CRM y ERP de gestión", cop(price_crm), cop(price_crm * 10), cop(price_crm * 22)],
+            ["2. Asistencia", cop(price_attendance), cop(price_attendance * 10), cop(price_attendance * 22)],
+            ["3. Drive", cop(price_drive), cop(price_drive * 10), cop(price_drive * 22)],
             ["Los tres juntos", cop(full_user), cop(full_user * 10), cop(full_user * 22)],
         ],
         [2800, 2200, 2300, 2300],
@@ -1467,22 +1435,84 @@ def build():
     )
     add_note(
         doc,
-        "No hay un precio de paquete distinto de la suma. Un módulo son $20.000 por usuario. Dos son $40.000. Los tres son $60.000. Para 30 usuarios, un módulo son $600.000 al mes y los tres son $1.800.000 al mes.",
+        "Anualidad por usuario = mensualidad × 10, y cubre 12 meses. "
+        f"El CRM y ERP al año son {cop(price_crm * 10)} por usuario. La asistencia, {cop(price_attendance * 10)}. El Drive, {cop(price_drive * 10)}. Los tres, {cop(full_user * 10)}. "
+        "La vitalicia es la mensualidad × 22: "
+        f"{cop(price_crm * 22)}, {cop(price_attendance * 22)} y {cop(price_drive * 22)} por usuario, y {cop(full_user * 22)} los tres. "
+        "El soporte opcional, después de los 3 meses de garantía, es el 40 % de lo que el cliente paga por usuario.",
     )
 
-    add_subheading(doc, "11.3. Qué paga el cliente por fuera")
+    add_subheading(doc, "11.2. Módulos sueltos o combinados")
+    add_body(
+        doc,
+        [
+            (
+                "El cliente elige uno, dos o los tres. Dos módulos se cobran como la suma de sus tarifas. Los reportes de cada módulo van con ese módulo. La cuota de 2 TB va solo con el Drive, así se tome suelto o con los demás. La VPS la coloca el cliente en cualquier combinación.",
+                False,
+            )
+        ],
+    )
     add_table(
         doc,
-        ["Concepto", "Quién lo paga", "Referencia leída el 14 de octubre de 2026"],
+        ["Combinación", "Por usuario al mes", "Anualidad por usuario", "Vitalicia por usuario"],
         [
             [
-                "VPS Hostinger KVM 1",
-                "EL CLIENTE, a Hostinger",
-                "Oferta $19.900 al mes. Renovación $38.900 al mes, $466.800 al año. Disco de 50 GB.",
+                "CRM y ERP + asistencia",
+                cop(price_crm + price_attendance),
+                cop((price_crm + price_attendance) * 10),
+                cop((price_crm + price_attendance) * 22),
+            ],
+            [
+                "CRM y ERP + Drive",
+                cop(price_crm + price_drive),
+                cop((price_crm + price_drive) * 10),
+                cop((price_crm + price_drive) * 22),
+            ],
+            [
+                "Asistencia + Drive",
+                cop(price_attendance + price_drive),
+                cop((price_attendance + price_drive) * 10),
+                cop((price_attendance + price_drive) * 22),
+            ],
+            ["Los tres módulos", cop(full_user), cop(full_user * 10), cop(full_user * 22)],
+        ],
+        [2800, 2200, 2300, 2300],
+        aligns=["left", "center", "center", "center"],
+        size=9,
+        header_size=9,
+    )
+    add_note(
+        doc,
+        f"Para 30 usuarios, el CRM y ERP solo son {cop(price_crm * team)} al mes, la asistencia sola {cop(price_attendance * team)} y el Drive solo {cop(price_drive * team)}. Los tres juntos son {cop(full_user * team)} al mes.",
+    )
+
+    add_subheading(doc, "11.3. La VPS y el dominio los coloca el cliente")
+    add_body(
+        doc,
+        [
+            (
+                "La mensualidad, la anualidad y la licencia vitalicia son el software de RecoTime. No incluyen servidor ni dominio. La VPS la coloca el cliente antes de empezar: la contrata, la paga, entrega el acceso y la renueva. El dominio lo coloca del mismo modo. ",
+                False,
+            ),
+            ("THE COMPANY DEV", True),
+            (
+                " instala el sistema en esa VPS. Si el cliente no ha colocado la VPS y el dominio, el calendario de puesta en marcha no arranca.",
+                False,
+            ),
+        ],
+    )
+    add_table(
+        doc,
+        ["Concepto", "Quién lo coloca", "Referencia leída el 14 de octubre de 2026"],
+        [
+            [
+                "VPS Hostinger",
+                "EL CLIENTE la coloca",
+                "Referencia KVM 1: oferta $19.900 al mes. Renovación $38.900 al mes, $466.800 al año. Disco de 50 GB.",
             ],
             [
                 "Dominio",
-                "EL CLIENTE, al registrador",
+                "EL CLIENTE lo coloca",
                 "No tiene un solo precio. Depende de la extensión y el registrador.",
             ],
             [
@@ -1555,7 +1585,7 @@ def build():
             ["Reloj, biométrico o app en tiendas", "Se cotiza. Esta versión registra la marca dentro de RecoTime."],
             ["Sede adicional o espacio por encima de 2 TB", "Se cotiza. El disco adicional lo contrata el cliente en su VPS."],
             ["Consumo de WhatsApp", "Lo paga el cliente al proveedor de la línea. No va en la mensualidad."],
-            ["VPS y dominio", "Los paga el cliente. No se facturan dentro de RecoTime."],
+            ["VPS y dominio", "Los coloca el cliente. No se facturan dentro de RecoTime."],
         ],
         [4000, 5600],
     )
@@ -1569,7 +1599,7 @@ def build():
             ["Llegada, almuerzo, descansos y salida", "Módulo 2, suelto o con los demás", "Odoo Asistencias, Zoho People y Factorial."],
             ["Drive, intranet de 2 TB por cuenta", "Módulo 3, suelto o con los demás", "Google Workspace, Zoho WorkDrive y SharePoint."],
             ["Puesta en marcha y capacitación", "Incluidas", "En Odoo, Bitrix24, HubSpot y Business Central la implementación va aparte o se cotiza."],
-            ["VPS y dominio", "Los contrata EL CLIENTE", "Hostinger publica el KVM. El dominio lo define el registrador."],
+            ["VPS y dominio", "Los coloca EL CLIENTE", "Hostinger publica el KVM. RecoTime se instala ahí y no incluye el servidor."],
             ["Contabilidad y factura DIAN", "Fuera de esta versión", "Alegra, Siigo, Odoo y Business Central."],
             ["Nómina y PILA", "Fuera de esta versión", "Alegra Nómina, Siigo Nómina, Aleluya y Buk."],
         ],
@@ -1583,7 +1613,7 @@ def build():
         doc,
         [
             (
-                f"Empresa de 30 usuarios activos con los tres módulos, a {cop(full_user)} por usuario. La VPS y el dominio no van en la factura de RecoTime. Cálculo de este informe.",
+                f"Empresa de 30 usuarios activos con los tres módulos, a {cop(full_user)} por usuario. La factura es solo el software. La VPS y el dominio los coloca el cliente y no entran en estos pagos. Cálculo de este informe.",
                 False,
             )
         ],
@@ -1614,13 +1644,13 @@ def build():
     )
     add_note(
         doc,
-        f"Los dos pagos de la licencia vitalicia caen en el primer año: {cop(full_user * team * 22)}. El soporte opcional son nueve meses si el arranque es en enero: 9 × {cop(full_user * 0.4 * team)} = {cop(full_user * 0.4 * team * 9)}. Sumados a la licencia dan {cop(full_user * team * 22 + full_user * 0.4 * team * 9)}. La VPS KVM 1, si se renueva todo el año, suma {cop(kvm1_renew * 12)} que el cliente paga a Hostinger, fuera de esta tabla.",
+        f"Los dos pagos de la licencia vitalicia caen en el primer año: {cop(full_user * team * 22)}. El soporte opcional son nueve meses si el arranque es en enero: 9 × {cop(full_user * 0.4 * team)} = {cop(full_user * 0.4 * team * 9)}. Sumados a la licencia dan {cop(full_user * team * 22 + full_user * 0.4 * team * 9)}. La VPS queda fuera de esta tabla: la coloca el cliente. Si renueva un KVM 1 todo el año, paga {cop(kvm1_renew * 12)} a Hostinger.",
     )
     add_body(
         doc,
         [
             (
-                f"Si esa empresa toma un solo módulo, paga {cop(per_module)} por usuario: {cop(per_module * team)} al mes, o {cop(per_module * team * 10)} en la anualidad. Dos módulos son {cop(per_module * 2 * team)} al mes. La licencia regional de Odoo Standard sigue en {cop(usd_to_cop(odoo_co_std))} por usuario, {cop(usd_to_cop(odoo_co_std * team))} al mes para 30 usuarios, sin implementación. Los tres módulos de RecoTime, {cop(full_user * team)} al mes, quedan por encima de esa licencia y cerca de Google Workspace Business Standard para 30 usuarios, {cop(google_standard_cop * team)} al mes.",
+                f"Si esa empresa toma solo el CRM y ERP, paga {cop(price_crm)} por usuario: {cop(price_crm * team)} al mes, o {cop(price_crm * team * 10)} en la anualidad. La asistencia sola son {cop(price_attendance * team)} al mes y el Drive solo {cop(price_drive * team)}. La licencia regional de Odoo Standard sigue en {cop(usd_to_cop(odoo_co_std))} por usuario, {cop(usd_to_cop(odoo_co_std * team))} al mes para 30 usuarios, sin implementación. Los tres módulos de RecoTime son {cop(full_user * team)} al mes. Google Workspace Business Standard, para las mismas 30 personas, son {cop(google_standard_cop * team)} al mes e incluyen correo y 2 TB por persona.",
                 False,
             )
         ],
@@ -1639,9 +1669,12 @@ def build():
             ["Pago de la licencia vitalicia", "50 % al iniciar y 50 % a la entrega."],
             ["Medios de pago", "Nequi, transferencia o efectivo."],
             ["Fidelización", "1 mes gratis por cada año completo en la suscripción mensual, entregado al final del año. No aplica a la anualidad ni a la licencia vitalicia."],
-            ["Crecimiento", "Se cobra por usuario activo y por módulo contratado. Un módulo nuevo se suma a $20.000 por usuario."],
-            ["VPS y dominio", "Los contrata, los paga y los renueva EL CLIENTE. La cuota de 2 TB no amplía el disco de la VPS."],
-            ["Información de la empresa", "El calendario de 8 a 12 semanas corre cuando llegan el organigrama, los trabajadores, los clientes, el horario, la VPS y el dominio."],
+            [
+                "Crecimiento",
+                f"Se cobra por usuario activo y por módulo. CRM y ERP {cop(price_crm)}, asistencia {cop(price_attendance)}, Drive {cop(price_drive)}.",
+            ],
+            ["VPS y dominio", "Los coloca EL CLIENTE: los contrata, los paga, entrega el acceso y los renueva. La cuota de 2 TB no amplía el disco."],
+            ["Información de la empresa", "El calendario de 8 a 12 semanas corre cuando el cliente ya colocó la VPS y el dominio, y entregó organigrama, trabajadores, clientes y horario."],
         ],
         [2800, 6800],
     )
@@ -1650,12 +1683,12 @@ def build():
     add_bullet(
         doc,
         [
-            ("VPS en Hostinger y dominio: ", False),
+            ("VPS y dominio: los coloca ", False),
             ("EL CLIENTE", True),
-            (" los contrata, los paga y los renueva. ", False),
+            (". Los contrata, los paga, entrega el acceso y los renueva. ", False),
             ("THE COMPANY DEV", True),
             (
-                " instala RecoTime en esa VPS y no responde por caídas, lentitud, pérdida de información, vencimientos, renovaciones ni fallas del proveedor. La cuota de 2 TB del Drive es el techo del software. El espacio usable es el disco que traiga la VPS.",
+                " instala RecoTime en la VPS que el cliente colocó y no responde por caídas, lentitud, pérdida de información, vencimientos, renovaciones ni fallas del proveedor. La cuota de 2 TB del Drive es el techo del software. El espacio usable es el disco de esa VPS.",
                 False,
             ),
         ],
@@ -1712,7 +1745,7 @@ def build():
         doc,
         [
             (
-                f"Aprobar los tres módulos a {cop(per_module)} por usuario activo al mes cada uno. Los tres juntos son {cop(full_user)} por usuario, que es la suma.",
+                f"Aprobar el precio acoplado al mercado: CRM y ERP {cop(price_crm)}, asistencia {cop(price_attendance)} y Drive {cop(price_drive)} por usuario activo al mes. Los tres juntos son {cop(full_user)} por usuario, que es la suma.",
                 False,
             )
         ],
@@ -1721,7 +1754,7 @@ def build():
         doc,
         [
             (
-                f"Confirmar el reparto: el módulo 1 reúne CRM, ERP de gestión y trazabilidad; el módulo 2 es la asistencia; el módulo 3 es el Drive. Para 30 usuarios, un módulo son {cop(per_module * team)} al mes y los tres son {cop(full_user * team)}.",
+                f"Confirmar el reparto: el módulo 1 reúne CRM, ERP de gestión y trazabilidad; el módulo 2 es la asistencia; el módulo 3 es el Drive. Para 30 usuarios, el CRM y ERP son {cop(price_crm * team)} al mes y los tres módulos son {cop(full_user * team)}.",
                 False,
             )
         ],
@@ -1730,7 +1763,7 @@ def build():
         doc,
         [
             (
-                "Leer la sección 10.1 antes de usar la tabla con un cliente: un módulo a $20.000 es viable frente a Odoo y Bitrix24; los tres juntos quedan altos frente a una suite de una sola licencia; la cuota de 2 TB no cabe en el disco de 50 GB del KVM 1.",
+                "Usar la sección 10.1 con el cliente: cada módulo cabe en su referencia y los tres juntos quedan entre las dos licencias de Odoo en Colombia. La cuota de 2 TB es el techo del software; el disco usable es el de la VPS que el cliente coloque.",
                 False,
             )
         ],
@@ -1756,7 +1789,7 @@ def build():
         doc,
         [
             (
-                "Dejar por escrito, en cada propuesta, que la VPS y el dominio los paga el cliente, que la nómina y la factura electrónica quedan por fuera, y que las marcas las registra el trabajador o el supervisor.",
+                "Dejar por escrito, en cada propuesta, que la VPS y el dominio los coloca el cliente, que la mensualidad es solo el software, que la nómina y la factura electrónica quedan por fuera, y que las marcas las registra el trabajador o el supervisor.",
                 False,
             )
         ],
