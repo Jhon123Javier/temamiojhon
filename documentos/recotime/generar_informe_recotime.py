@@ -470,13 +470,9 @@ def build():
     odoo_us_custom_month = 76.20
     odoo_light = 8.90
     team = 30
-    full_user = 20000
-    mod_crm = 8000
-    mod_erp = 8000
-    mod_trace = 6000
-    mod_attendance = 7000
-    mod_drive = 8000
-    mod_sum = mod_crm + mod_erp + mod_trace + mod_attendance + mod_drive
+    per_module = 20000
+    module_count = 3
+    full_user = per_module * module_count
     google_standard_cop = 58400
     kvm1_offer = 19900
     kvm1_renew = 38900
@@ -574,7 +570,7 @@ def build():
                 "Clientes, procesos, áreas y el tablero de la operación.",
                 "Llegada, almuerzo, descansos y salida, persona por persona.",
                 "Intranet de la empresa. Cuota de 2 TB para toda la cuenta.",
-                "Sistema completo: $20.000 por usuario al mes. También se vende por módulos.",
+                "Cada módulo: $20.000 por usuario. Los tres juntos: $60.000.",
             ]
         ],
         [2400, 2400, 2400, 2400],
@@ -584,7 +580,7 @@ def build():
         doc,
         [
             (
-                f"La recomendación es cobrar el sistema completo a {cop(full_user)} por usuario activo al mes. En 30 usuarios son {cop(full_user * team)} al mes, con la puesta en marcha incluida. La licencia regional de Odoo Standard, a {usd(odoo_co_std)} por usuario, queda en {cop(usd_to_cop(odoo_co_std * team))} al mes para esas 30 personas, y esa cifra es solo la licencia. La VPS de Hostinger y el dominio los paga el cliente por su lado: la renovación del KVM 1 publicado hoy sale en {cop(kvm1_renew * 12)} al año.",
+                f"La recomendación es cobrar {cop(per_module)} por usuario activo al mes en cada módulo. Son tres: CRM y ERP de gestión, asistencia, y Drive. Un módulo, en 30 usuarios, son {cop(per_module * team)} al mes. Los tres juntos son {cop(full_user)} por usuario, {cop(full_user * team)} al mes. La licencia regional de Odoo Standard queda en {cop(usd_to_cop(odoo_co_std))} por usuario. La VPS y el dominio los paga el cliente: la renovación del KVM 1 sale en {cop(kvm1_renew * 12)} al año.",
                 False,
             )
         ],
@@ -804,27 +800,15 @@ def build():
         ["Módulo", "Qué incluye"],
         [
             [
-                "1. CRM",
-                "Clientes, contactos y oportunidades. Etapas del seguimiento, responsable y próxima acción. Historial de la relación.",
+                "1. CRM y ERP de gestión",
+                "Clientes, contactos, oportunidades y seguimiento. Áreas, cargos, procesos y tablero. Trazabilidad del trabajador: ficha, asignación, actividad y estado. Reportes de la operación.",
             ],
             [
-                "2. ERP de gestión",
-                "Áreas, cargos y procesos. Tablero de la operación para gerencia. Usuarios, roles y permisos de los cuatro accesos.",
+                "2. Asistencia",
+                "Llegada, inicio y fin de almuerzo, descansos y salida. Línea de tiempo por trabajador. Lista del día para el supervisor. Reportes de la jornada.",
             ],
             [
-                "3. Trazabilidad del trabajador",
-                "Ficha de la persona. Asignación a un cliente o a un proceso. Actividad con inicio, fin y estado. Historial que permanece al cerrar el día.",
-            ],
-            [
-                "4. Asistencia",
-                "Llegada, inicio y fin de almuerzo, descansos y salida. Línea de tiempo por trabajador. Lista del día para el supervisor.",
-            ],
-            [
-                "5. Reportes",
-                "Puntualidad, duración de almuerzo y descansos, carga por persona y avance comercial. Exportación de la consulta. Viajan con el módulo al que corresponden.",
-            ],
-            [
-                "6. Drive",
+                "3. Drive",
                 "Intranet de la empresa. Carpetas por área, documentos de la gestión y permisos por rol. Cuota de 2 TB para toda la cuenta.",
             ],
         ],
@@ -1280,7 +1264,7 @@ def build():
         doc,
         [
             (
-                f"La sección 11 cobra el sistema completo a {cop(full_user)} por usuario al mes. Para 30 usuarios son {cop(full_user * team)}. Frente a la licencia regional de Odoo Standard para esas 30 personas, el sistema completo queda {cop(usd_to_cop(odoo_co_std * team) - full_user * team)} más bajo, y la puesta en marcha de RecoTime va incluida. Frente a Bitrix24 Professional con pago anual, 30 usuarios de RecoTime quedan {cop(usd_to_cop(199) - full_user * team)} más bajos. A partir de 32 usuarios el fijo de Bitrix24, que no sube hasta los 100, vuelve a quedar por debajo: 40 usuarios de RecoTime son {cop(full_user * 40)} y Professional sigue en {cop(usd_to_cop(199))}.",
+                f"Cada módulo cuesta {cop(per_module)} por usuario al mes. Un solo módulo, para 30 usuarios, son {cop(per_module * team)}. Eso queda {cop(usd_to_cop(odoo_co_std * team) - per_module * team)} por debajo de la licencia regional de Odoo Standard para 30 usuarios, y la puesta en marcha de ese módulo va incluida. Los tres módulos juntos son {cop(full_user)} por usuario, {cop(full_user * team)} al mes para 30 personas. Esa suma queda {cop(full_user * team - usd_to_cop(odoo_co_std * team))} por encima de la sola licencia de Odoo, porque Odoo cobra una vez por todas las aplicaciones y RecoTime cobra cada módulo.",
                 False,
             )
         ],
@@ -1289,7 +1273,7 @@ def build():
         doc,
         [
             (
-                f"El módulo Drive, suelto, queda en {cop(mod_drive)} por usuario. Zoho WorkDrive Team, solo archivos, equivale a {cop(usd_to_cop(4.50))} por usuario y reparte varios terabytes según el tamaño del equipo. Google Workspace Business Standard, en la lista de Colombia, cuesta {cop(google_standard_cop)} por usuario e incluye 2 TB por persona, correo y documentos. El Drive de RecoTime no reemplaza ese correo ni entrega 2 TB por cabeza: entrega una intranet de 2 TB para toda la cuenta, dentro del mismo usuario del CRM y de la asistencia.",
+                f"El Drive, como módulo suelto, queda en {cop(per_module)} por usuario. Zoho WorkDrive Team, solo archivos, equivale a {cop(usd_to_cop(4.50))} por usuario. SharePoint Plan 1 equivale a {cop(usd_to_cop(5))}. Google Workspace Business Standard, en la lista de Colombia, cuesta {cop(google_standard_cop)} por usuario, casi el valor de los tres módulos de RecoTime juntos ({cop(full_user)}), e incluye 2 TB por persona, correo y documentos. El Drive de RecoTime entrega una intranet de 2 TB para toda la cuenta, no 2 TB por cabeza.",
                 False,
             )
         ],
@@ -1298,7 +1282,7 @@ def build():
         doc,
         [
             (
-                f"La VPS no entra en los {cop(full_user)}. El cliente la paga a Hostinger y también pone el dominio. La referencia de $500.000 al año corresponde a la renovación del KVM 1, {cop(kvm1_renew * 12)}. Ese plan trae 50 GB de disco. La cuota de 2 TB del Drive es el techo del software. Mientras el disco de la VPS sea menor, el espacio usable es el del disco.",
+                f"La VPS no entra en los {cop(per_module)} de cada módulo. El cliente la paga a Hostinger y también pone el dominio. La referencia de $500.000 al año corresponde a la renovación del KVM 1, {cop(kvm1_renew * 12)}. Ese plan trae 50 GB de disco. La cuota de 2 TB del Drive es el techo del software. Mientras el disco de la VPS sea menor, el espacio usable es el del disco.",
                 False,
             )
         ],
@@ -1345,12 +1329,12 @@ def build():
         header_size=8,
     )
 
-    add_subheading(doc, "11.1. Sistema completo")
+    add_subheading(doc, "11.1. Precio por módulo")
     add_body(
         doc,
         [
             (
-                f"El sistema completo cuesta {cop(full_user)} por usuario activo al mes. Incluye CRM, ERP de gestión, trazabilidad, asistencia, reportes y Drive, con la cuota de 2 TB para toda la cuenta. La suma de los cinco módulos sueltos es {cop(mod_sum)}. El completo queda por debajo de esa suma a propósito: quien necesita la operación entera paga {cop(full_user)}, no {cop(mod_sum)}.",
+                f"Cada módulo cuesta {cop(per_module)} por usuario activo al mes. Los tres juntos cuestan {cop(full_user)} por usuario: es la suma, sin un descuento aparte. Quien toma un módulo paga {cop(per_module)}. Quien toma los tres paga {cop(full_user)}.",
                 False,
             )
         ],
@@ -1360,7 +1344,19 @@ def build():
         ["Forma", "Por usuario al mes", "Anualidad por usuario", "Vitalicia por usuario"],
         [
             [
-                "Sistema completo",
+                "Un módulo",
+                cop(per_module),
+                cop(per_module * 10),
+                cop(per_module * 22),
+            ],
+            [
+                "Dos módulos",
+                cop(per_module * 2),
+                cop(per_module * 2 * 10),
+                cop(per_module * 2 * 22),
+            ],
+            [
+                "Los tres módulos",
                 cop(full_user),
                 cop(full_user * 10),
                 cop(full_user * 22),
@@ -1371,39 +1367,36 @@ def build():
     )
     add_note(
         doc,
-        "Anualidad por usuario = $20.000 × 10 = $200.000, y cubre 12 meses. Equivale a $16.667 al mes ($200.000 ÷ 12, redondeado). Vitalicia por usuario = $20.000 × 22 = $440.000. El soporte opcional, después de los 3 meses de garantía, es el 40 % de la mensualidad por usuario: $8.000 en el sistema completo.",
+        "Anualidad por usuario = mensualidad × 10, y cubre 12 meses. Un módulo al año son $200.000 por usuario, equivalentes a $16.667 al mes. Los tres módulos al año son $600.000 por usuario. La vitalicia es la mensualidad × 22: $440.000 por usuario en un módulo y $1.320.000 en los tres. El soporte opcional, después de los 3 meses de garantía, es el 40 % de lo que el cliente paga por usuario.",
     )
 
-    add_subheading(doc, "11.2. Módulos sueltos")
+    add_subheading(doc, "11.2. Los tres módulos, sueltos o juntos")
     add_body(
         doc,
         [
             (
-                "Si el cliente quiere una parte, cada módulo se cobra por usuario activo. Los reportes del módulo van incluidos. Drive suelto incluye la misma cuota de 2 TB de la cuenta.",
+                "El precio de cada módulo es el mismo. El cliente elige uno, dos o los tres. Los reportes de cada módulo van con ese módulo. La cuota de 2 TB va solo con el Drive, así se compre suelto o con los demás.",
                 False,
             )
         ],
     )
     add_table(
         doc,
-        ["Módulo suelto", "Por usuario al mes", "Anualidad por usuario", "Vitalicia por usuario"],
+        ["Módulo", "Por usuario al mes", "Anualidad por usuario", "Vitalicia por usuario"],
         [
-            ["CRM", cop(mod_crm), cop(mod_crm * 10), cop(mod_crm * 22)],
-            ["ERP de gestión", cop(mod_erp), cop(mod_erp * 10), cop(mod_erp * 22)],
-            ["Trazabilidad", cop(mod_trace), cop(mod_trace * 10), cop(mod_trace * 22)],
-            ["Asistencia", cop(mod_attendance), cop(mod_attendance * 10), cop(mod_attendance * 22)],
-            ["Drive", cop(mod_drive), cop(mod_drive * 10), cop(mod_drive * 22)],
-            ["Suma de los cinco", cop(mod_sum), cop(mod_sum * 10), cop(mod_sum * 22)],
-            ["Sistema completo", cop(full_user), cop(full_user * 10), cop(full_user * 22)],
+            ["1. CRM y ERP de gestión", cop(per_module), cop(per_module * 10), cop(per_module * 22)],
+            ["2. Asistencia", cop(per_module), cop(per_module * 10), cop(per_module * 22)],
+            ["3. Drive", cop(per_module), cop(per_module * 10), cop(per_module * 22)],
+            ["Los tres juntos", cop(full_user), cop(full_user * 10), cop(full_user * 22)],
         ],
-        [2400, 2400, 2400, 2400],
+        [2800, 2200, 2300, 2300],
         aligns=["left", "center", "center", "center"],
         size=9,
         header_size=9,
     )
     add_note(
         doc,
-        "Si la suma de los módulos que el cliente elige llega a $20.000 o la supera, se cobra el sistema completo y se entregan los cinco. Dos módulos quedan por debajo de ese tope. Tres módulos, en las combinaciones de esta tabla, lo cruzan. Ejemplo: CRM y Drive suman $16.000 por usuario. CRM, ERP y asistencia suman $23.000, así que el cliente paga $20.000 y recibe todo.",
+        "No hay un precio de paquete distinto de la suma. Un módulo son $20.000 por usuario. Dos son $40.000. Los tres son $60.000. Para 30 usuarios, un módulo son $600.000 al mes y los tres son $1.800.000 al mes.",
     )
 
     add_subheading(doc, "11.3. Qué paga el cliente por fuera")
@@ -1501,11 +1494,9 @@ def build():
         doc,
         ["Proceso", "RecoTime, esta versión", "Dónde aparece en el mercado citado"],
         [
-            ["CRM de clientes y oportunidades", "Incluido en el completo y vendible suelto", "Odoo, Bitrix24, Zoho CRM y HubSpot."],
-            ["ERP de gestión: áreas, cargos y procesos", "Incluido en el completo y vendible suelto", "Odoo y Business Central, en una suite más amplia."],
-            ["Trazabilidad del trabajador", "Incluida, con actividad y estado", "Odoo RR. HH. y Buk la acercan. No es el centro de Bitrix24 Standard."],
-            ["Llegada, almuerzo, descansos y salida", "Incluidos, en la línea del día", "Odoo Asistencias, Zoho People y Factorial registran tiempo."],
-            ["Drive, intranet de 2 TB por cuenta", "Incluido en el completo y vendible suelto", "Google Workspace, Zoho WorkDrive y SharePoint. Ellos entregan más disco por persona."],
+            ["CRM, ERP y trazabilidad", "Módulo 1, suelto o con los demás", "Odoo, Bitrix24, Zoho CRM y HubSpot."],
+            ["Llegada, almuerzo, descansos y salida", "Módulo 2, suelto o con los demás", "Odoo Asistencias, Zoho People y Factorial."],
+            ["Drive, intranet de 2 TB por cuenta", "Módulo 3, suelto o con los demás", "Google Workspace, Zoho WorkDrive y SharePoint."],
             ["Puesta en marcha y capacitación", "Incluidas", "En Odoo, Bitrix24, HubSpot y Business Central la implementación va aparte o se cotiza."],
             ["VPS y dominio", "Los contrata EL CLIENTE", "Hostinger publica el KVM. El dominio lo define el registrador."],
             ["Contabilidad y factura DIAN", "Fuera de esta versión", "Alegra, Siigo, Odoo y Business Central."],
@@ -1521,7 +1512,7 @@ def build():
         doc,
         [
             (
-                f"Empresa de 30 usuarios activos con el sistema completo, a {cop(full_user)} por usuario. La VPS y el dominio no van en la factura de RecoTime. Cálculo de este informe.",
+                f"Empresa de 30 usuarios activos con los tres módulos, a {cop(full_user)} por usuario. La VPS y el dominio no van en la factura de RecoTime. Cálculo de este informe.",
                 False,
             )
         ],
@@ -1558,7 +1549,7 @@ def build():
         doc,
         [
             (
-                f"Si esa empresa toma solo asistencia y Drive, paga {cop(mod_attendance + mod_drive)} por usuario: {cop((mod_attendance + mod_drive) * team)} al mes. La suma no llega a {cop(full_user)}, así que no se convierte en sistema completo. Si agrega el CRM, la suma pasa a {cop(mod_attendance + mod_drive + mod_crm)} y entonces paga {cop(full_user)} por usuario y recibe los cinco módulos. La licencia regional de Odoo Standard sigue en {cop(usd_to_cop(odoo_co_std))} por usuario, {cop(usd_to_cop(odoo_co_std * team))} al mes para 30 usuarios, sin implementación.",
+                f"Si esa empresa toma un solo módulo, paga {cop(per_module)} por usuario: {cop(per_module * team)} al mes, o {cop(per_module * team * 10)} en la anualidad. Dos módulos son {cop(per_module * 2 * team)} al mes. La licencia regional de Odoo Standard sigue en {cop(usd_to_cop(odoo_co_std))} por usuario, {cop(usd_to_cop(odoo_co_std * team))} al mes para 30 usuarios, sin implementación. Los tres módulos de RecoTime, {cop(full_user * team)} al mes, quedan por encima de esa licencia y cerca de Google Workspace Business Standard para 30 usuarios, {cop(google_standard_cop * team)} al mes.",
                 False,
             )
         ],
@@ -1577,7 +1568,7 @@ def build():
             ["Pago de la licencia vitalicia", "50 % al iniciar y 50 % a la entrega."],
             ["Medios de pago", "Nequi, transferencia o efectivo."],
             ["Fidelización", "1 mes gratis por cada año completo en la suscripción mensual, entregado al final del año. No aplica a la anualidad ni a la licencia vitalicia."],
-            ["Crecimiento", "Se cobra por usuario activo. Si la suma de módulos sueltos llega a $20.000, pasa al sistema completo."],
+            ["Crecimiento", "Se cobra por usuario activo y por módulo contratado. Un módulo nuevo se suma a $20.000 por usuario."],
             ["VPS y dominio", "Los contrata, los paga y los renueva EL CLIENTE. La cuota de 2 TB no amplía el disco de la VPS."],
             ["Información de la empresa", "El calendario de 8 a 12 semanas corre cuando llegan el organigrama, los trabajadores, los clientes, el horario, la VPS y el dominio."],
         ],
@@ -1650,7 +1641,7 @@ def build():
         doc,
         [
             (
-                f"Aprobar el sistema completo a {cop(full_user)} por usuario activo al mes, y los módulos sueltos de la sección 11.2, con la regla de que al llegar a {cop(full_user)} se entrega todo.",
+                f"Aprobar los tres módulos a {cop(per_module)} por usuario activo al mes cada uno. Los tres juntos son {cop(full_user)} por usuario, que es la suma.",
                 False,
             )
         ],
@@ -1659,7 +1650,7 @@ def build():
         doc,
         [
             (
-                f"Confirmar que {cop(full_user)} cubre CRM, ERP de gestión, trazabilidad, asistencia, reportes y Drive. Para 30 usuarios son {cop(full_user * team)} al mes, por debajo de la licencia regional de Odoo Standard.",
+                f"Confirmar el reparto: el módulo 1 reúne CRM, ERP de gestión y trazabilidad; el módulo 2 es la asistencia; el módulo 3 es el Drive. Para 30 usuarios, un módulo son {cop(per_module * team)} al mes y los tres son {cop(full_user * team)}.",
                 False,
             )
         ],
