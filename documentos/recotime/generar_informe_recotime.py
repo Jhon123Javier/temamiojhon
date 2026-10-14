@@ -574,7 +574,7 @@ def build():
             [
                 "Clientes, procesos, áreas y el tablero de la operación.",
                 "Llegada, almuerzo, descansos y salida, persona por persona.",
-                "Intranet de la empresa. Cuota de 2 TB para toda la cuenta.",
+                "Intranet de la empresa. THE COMPANY DEV entrega 2 TB para toda la cuenta.",
                 "CRM y ERP $15.000. Asistencia $8.000. Drive $10.000. Los tres: $33.000.",
             ]
         ],
@@ -590,7 +590,7 @@ def build():
             ),
             ("La VPS la coloca el cliente. ", True),
             (
-                f"La contrata, la paga, entrega el acceso y la renueva. El dominio también lo coloca el cliente. La mensualidad de RecoTime no incluye servidor. La renovación del KVM 1 de Hostinger sale en {cop(kvm1_renew * 12)} al año y trae 50 GB de disco.",
+                f"La contrata, la paga, entrega el acceso y la renueva. El dominio también lo coloca el cliente. La mensualidad de RecoTime no incluye servidor. La renovación del KVM 1 de Hostinger sale en {cop(kvm1_renew * 12)} al año. Los 2 TB del Drive los entrega THE COMPANY DEV.",
                 False,
             ),
         ],
@@ -619,9 +619,14 @@ def build():
         doc,
         [
             (
-                "El módulo Drive es la intranet de la empresa. Ahí se guarda la información de la gestión: documentos, manuales, actas, formatos y las carpetas de cada área. Cada persona ve lo que su rol permite. La cuota incluida es de 2 TB para toda la cuenta, compartida. No son 2 TB por usuario.",
+                "El módulo Drive es la intranet de la empresa. Ahí se guarda la información de la gestión: documentos, manuales, actas, formatos y las carpetas de cada área. Cada persona ve lo que su rol permite. ",
                 False,
-            )
+            ),
+            ("THE COMPANY DEV", True),
+            (
+                " entrega los 2 TB sí o sí. Son 2 TB para toda la cuenta, no por usuario.",
+                False,
+            ),
         ],
     )
     add_body(
@@ -1180,7 +1185,7 @@ def build():
         doc,
         [
             (
-                "Fuente: hostinger.com/co/precios/vps-hosting, abierta el 14 de octubre de 2026. La página muestra una oferta al mes y una renovación. La pregunta frecuente usa la oferta: KVM 1 en $19.900, KVM 2 en $28.900, KVM 4 en $38.900 y KVM 8 en $77.900. La tarjeta de cada plan dice a cuánto se renueva. El disco publicado es NVMe y, en esta lista, no llega a 2 TB. El ancho de banda de 4 TB del KVM 1 es tráfico, no espacio para guardar archivos.",
+                "Fuente: hostinger.com/co/precios/vps-hosting, abierta el 14 de octubre de 2026. La página muestra una oferta al mes y una renovación. La pregunta frecuente usa la oferta: KVM 1 en $19.900, KVM 2 en $28.900, KVM 4 en $38.900 y KVM 8 en $77.900. La tarjeta de cada plan dice a cuánto se renueva. El disco publicado es NVMe. El ancho de banda de 4 TB del KVM 1 es tráfico, no espacio para guardar archivos. Los 2 TB del Drive no dependen de ese disco: los entrega THE COMPANY DEV.",
                 False,
             )
         ],
@@ -1336,7 +1341,7 @@ def build():
                 "VPS y dominio",
                 "KVM 1: 50 GB por " + cop(kvm1_renew * 12) + " al año",
                 "Fuera de la mensualidad",
-                "Los coloca el cliente. La cuota de 2 TB no amplía ese disco.",
+                "Los coloca el cliente. Los 2 TB del Drive los entrega THE COMPANY DEV.",
             ],
         ],
         [2100, 2800, 2500, 2200],
@@ -1348,7 +1353,7 @@ def build():
         doc,
         [
             (
-                f"El Drive queda en {cop(price_drive)} por usuario. Zoho WorkDrive Team, solo archivos, equivale a {cop(usd_to_cop(4.50))} por usuario. SharePoint Plan 1 equivale a {cop(usd_to_cop(5))}. Google Workspace Business Standard, en la lista de Colombia, cuesta {cop(google_standard_cop)} por usuario e incluye correo, documentos y 2 TB por persona. Los tres módulos de RecoTime juntos son {cop(full_user)} por usuario. El Drive de RecoTime es una intranet de 2 TB para toda la cuenta, no 2 TB por cabeza.",
+                f"El Drive queda en {cop(price_drive)} por usuario. Zoho WorkDrive Team, solo archivos, equivale a {cop(usd_to_cop(4.50))} por usuario. SharePoint Plan 1 equivale a {cop(usd_to_cop(5))}. Google Workspace Business Standard, en la lista de Colombia, cuesta {cop(google_standard_cop)} por usuario e incluye correo, documentos y 2 TB por persona. Los tres módulos de RecoTime juntos son {cop(full_user)} por usuario. Con el Drive, THE COMPANY DEV entrega 2 TB para toda la cuenta.",
                 False,
             )
         ],
@@ -1362,7 +1367,7 @@ def build():
             ),
             ("THE COMPANY DEV", True),
             (
-                f" y la renueva. El dominio también lo coloca el cliente. La instalación de RecoTime se hace en esa VPS y no se factura como hosting. La referencia de $500.000 al año corresponde a la renovación del KVM 1, {cop(kvm1_renew * 12)}. Ese plan trae 50 GB de disco. La cuota de 2 TB del Drive es el techo del software. El espacio usable es el disco de la VPS que el cliente haya colocado.",
+                f" y la renueva. El dominio también lo coloca el cliente. La instalación de RecoTime se hace en esa VPS y no se factura como hosting. La referencia de $500.000 al año corresponde a la renovación del KVM 1, {cop(kvm1_renew * 12)}. Los 2 TB del Drive los entrega THE COMPANY DEV, sí o sí, con ese módulo.",
                 False,
             ),
         ],
@@ -1518,7 +1523,7 @@ def build():
             [
                 "Cuota Drive de 2 TB",
                 "Incluida en RecoTime",
-                "Es el techo del software. El espacio usable es el disco de la VPS.",
+                "THE COMPANY DEV los entrega sí o sí con el módulo Drive. Son 2 TB para toda la cuenta.",
             ],
         ],
         [2200, 2500, 4900],
@@ -1528,7 +1533,7 @@ def build():
     )
     add_note(
         doc,
-        "KVM 8, el plan más alto de esa página, trae 400 GB y se renueva en $2.026.800 al año. Ninguna VPS de la lista pública llega a 2 TB. La propuesta al cliente debe decir que la cuota de 2 TB se usa hasta donde el disco contratado lo permita.",
+        "KVM 8, el plan más alto de esa página, se renueva en $2.026.800 al año. Esa tabla es el costo de la VPS que coloca el cliente. Los 2 TB del Drive los entrega THE COMPANY DEV, sí o sí.",
     )
 
     add_subheading(doc, "11.4. Licencia vitalicia")
@@ -1583,7 +1588,7 @@ def build():
             ["Nómina, PILA o factura electrónica DIAN", "Se cotizan, o permanecen en el software contable del cliente."],
             ["Inventario, compras o POS", "Se cotizan según el alcance."],
             ["Reloj, biométrico o app en tiendas", "Se cotiza. Esta versión registra la marca dentro de RecoTime."],
-            ["Sede adicional o espacio por encima de 2 TB", "Se cotiza. El disco adicional lo contrata el cliente en su VPS."],
+            ["Sede adicional o espacio por encima de 2 TB", "Se cotiza. Los 2 TB del Drive los entrega THE COMPANY DEV."],
             ["Consumo de WhatsApp", "Lo paga el cliente al proveedor de la línea. No va en la mensualidad."],
             ["VPS y dominio", "Los coloca el cliente. No se facturan dentro de RecoTime."],
         ],
@@ -1673,7 +1678,8 @@ def build():
                 "Crecimiento",
                 f"Se cobra por usuario activo y por módulo. CRM y ERP {cop(price_crm)}, asistencia {cop(price_attendance)}, Drive {cop(price_drive)}.",
             ],
-            ["VPS y dominio", "Los coloca EL CLIENTE: los contrata, los paga, entrega el acceso y los renueva. La cuota de 2 TB no amplía el disco."],
+            ["VPS y dominio", "Los coloca EL CLIENTE: los contrata, los paga, entrega el acceso y los renueva."],
+            ["2 TB del Drive", "Los entrega THE COMPANY DEV, sí o sí, cuando el cliente toma el módulo Drive."],
             ["Información de la empresa", "El calendario de 8 a 12 semanas corre cuando el cliente ya colocó la VPS y el dominio, y entregó organigrama, trabajadores, clientes y horario."],
         ],
         [2800, 6800],
@@ -1688,7 +1694,7 @@ def build():
             (". Los contrata, los paga, entrega el acceso y los renueva. ", False),
             ("THE COMPANY DEV", True),
             (
-                " instala RecoTime en la VPS que el cliente colocó y no responde por caídas, lentitud, pérdida de información, vencimientos, renovaciones ni fallas del proveedor. La cuota de 2 TB del Drive es el techo del software. El espacio usable es el disco de esa VPS.",
+                " instala RecoTime en la VPS que el cliente colocó y no responde por caídas, lentitud, pérdida de información, vencimientos, renovaciones ni fallas del proveedor. Los 2 TB del Drive los entrega THE COMPANY DEV, sí o sí.",
                 False,
             ),
         ],
@@ -1763,7 +1769,7 @@ def build():
         doc,
         [
             (
-                "Usar la sección 10.1 con el cliente: cada módulo cabe en su referencia y los tres juntos quedan entre las dos licencias de Odoo en Colombia. La cuota de 2 TB es el techo del software; el disco usable es el de la VPS que el cliente coloque.",
+                "Usar la sección 10.1 con el cliente: cada módulo cabe en su referencia y los tres juntos quedan entre las dos licencias de Odoo en Colombia. Los 2 TB del Drive los entrega THE COMPANY DEV, sí o sí.",
                 False,
             )
         ],
