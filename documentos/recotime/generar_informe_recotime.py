@@ -533,14 +533,15 @@ def build():
         doc,
         [
             (
-                "“El día del equipo se entiende cuando se ve la llegada, el almuerzo, el descanso y el trabajo de cada persona.”",
+                "Quién atendió al cliente, qué se dijo y cómo fue la jornada.",
                 False,
             )
         ],
-        size=13,
-        before=0,
+        size=12,
+        before=2,
         after=8,
         align="left",
+        color=NAVY,
     )
 
     add_heading(doc, "RESUMEN EJECUTIVO")
