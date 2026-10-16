@@ -33,6 +33,8 @@ KEYWORDS = (
     "RecoRoute",
     "RECOTIME",
     "RecoTime",
+    "KYBOX",
+    "Kybox",
     "SEO",
     "Seo",
     "CRM",
@@ -777,7 +779,7 @@ def build():
         doc,
         [
             (
-                "El comprador de esta versión es la empresa que dirige personas y clientes. Las cifras de nómina y de contabilidad de la sección 9 sirven para mostrar qué problema cubre otro producto. RecoTime puede crecer después, por cotización, hacia varias sedes, marcación desde un reloj o una aplicación publicada en tienda.",
+                "El comprador de esta versión es la empresa que dirige personas y clientes. Las cifras de nómina y de contabilidad de la sección 9 sirven para mostrar qué problema cubre otro producto. Nómina, contabilidad, varias sedes, reloj o aplicación en tienda se presuponen en Kybox, un servicio aparte.",
                 False,
             )
         ],
@@ -885,7 +887,7 @@ def build():
         doc,
         [
             (
-                "La configuración, la carga inicial acordada, la estructura de carpetas del Drive, la capacitación por rol y la documentación básica van incluidas en las tres modalidades. El calendario propuesto es de 8 a 12 semanas, contadas desde el día en que la empresa entrega el organigrama, la lista de trabajadores, los clientes activos, el horario de llegada, almuerzo y descansos, y el acceso a la VPS y al dominio. Si esa información llega después, el calendario se corre.",
+                "La configuración, la carga inicial acordada, la estructura de carpetas del Drive, la capacitación por rol y la documentación básica van incluidas en las tres modalidades. La puesta en marcha dura de 1 a 2 semanas, contadas desde el día en que la empresa entrega a tiempo el organigrama, la lista de trabajadores, los clientes activos, el horario de llegada, almuerzo y descansos, y el acceso a la VPS y al dominio. Si esa información llega después, el calendario se corre.",
                 False,
             )
         ],
@@ -895,9 +897,14 @@ def build():
         doc,
         [
             (
-                "Esta versión deja para una cotización posterior la nómina, la PILA, la nómina electrónica ante la DIAN, la factura electrónica, la contabilidad, el inventario, las compras y el POS. También se cotizan el reloj o el biométrico, la publicación en Play Store o App Store, varias sedes, el espacio por encima de la cuota de 2 TB y el consumo de WhatsApp. Las marcas de esta versión las registra el trabajador o el supervisor dentro de RecoTime. La VPS y el dominio no se cotizan aquí: los coloca el cliente.",
+                "Lo que queda fuera de esta versión se presupuesta por aparte, en otro servicio de ",
                 False,
-            )
+            ),
+            ("THE COMPANY DEV", True),
+            (
+                " que se llama Kybox: la nómina, la PILA, la nómina electrónica ante la DIAN, la factura electrónica, la contabilidad, el inventario, las compras y el POS. En Kybox también entran el reloj o el biométrico, la publicación en Play Store o App Store, varias sedes, el espacio por encima de la cuota de 2 TB y el consumo de WhatsApp. Las marcas de esta versión las registra el trabajador o el supervisor dentro de RecoTime. La VPS y el dominio los coloca el cliente.",
+                False,
+            ),
         ],
     )
 
@@ -1636,11 +1643,11 @@ def build():
                 "Hora adicional de soporte o ajustes",
                 "$90.000. Es la misma hora ya planteada en los perfiles de RecoRoute y de Campus by TCD.",
             ],
-            ["Nómina, PILA o factura electrónica DIAN", "Se cotizan, o permanecen en el software contable del cliente."],
-            ["Inventario, compras o POS", "Se cotizan según el alcance."],
-            ["Reloj, biométrico o app en tiendas", "Se cotiza. Esta versión registra la marca dentro de RecoTime."],
-            ["Sede adicional o espacio por encima de 2 TB", "Se cotiza. Los 2 TB del Drive los entrega THE COMPANY DEV."],
-            ["Consumo de WhatsApp", "Lo paga el cliente al proveedor de la línea. No va en la mensualidad."],
+            ["Nómina, PILA o factura electrónica DIAN", "Se presupuesta en Kybox, o permanece en el software contable del cliente."],
+            ["Inventario, compras o POS", "Se presupuesta en Kybox, según el alcance."],
+            ["Reloj, biométrico o app en tiendas", "Se presupuesta en Kybox. Esta versión registra la marca dentro de RecoTime."],
+            ["Sede adicional o espacio por encima de 2 TB", "Se presupuesta en Kybox. Los 2 TB del Drive los entrega THE COMPANY DEV."],
+            ["Consumo de WhatsApp", "Se presupuesta en Kybox. El consumo de la línea lo paga el cliente al proveedor."],
             ["VPS y dominio", "Los coloca el cliente. No se facturan dentro de RecoTime."],
         ],
         [4000, 5600],
@@ -1656,8 +1663,8 @@ def build():
             ["Drive, intranet de 2 TB por cuenta", "Módulo 3, suelto o con los demás", "Google Workspace, Zoho WorkDrive y SharePoint."],
             ["Puesta en marcha y capacitación", "Incluidas", "En Odoo, Bitrix24, HubSpot y Business Central la implementación va aparte o se cotiza."],
             ["VPS y dominio", "Los coloca EL CLIENTE", "Hostinger publica el KVM. RecoTime se instala ahí y no incluye el servidor."],
-            ["Contabilidad y factura DIAN", "Fuera de esta versión", "Alegra, Siigo, Odoo y Business Central."],
-            ["Nómina y PILA", "Fuera de esta versión", "Alegra Nómina, Siigo Nómina, Aleluya y Buk."],
+            ["Contabilidad y factura DIAN", "Fuera de esta versión. Se presupuesta en Kybox.", "Alegra, Siigo, Odoo y Business Central."],
+            ["Nómina y PILA", "Fuera de esta versión. Se presupuesta en Kybox.", "Alegra Nómina, Siigo Nómina, Aleluya y Buk."],
         ],
         [2300, 3300, 4000],
         size=8,
@@ -1731,7 +1738,7 @@ def build():
             ],
             ["VPS y dominio", "Los coloca EL CLIENTE: los contrata, los paga, entrega el acceso y los renueva."],
             ["2 TB del Drive", "Los entrega THE COMPANY DEV, sí o sí, cuando el cliente toma el módulo Drive."],
-            ["Información de la empresa", "El calendario de 8 a 12 semanas corre cuando el cliente ya colocó la VPS y el dominio, y entregó organigrama, trabajadores, clientes y horario."],
+            ["Información de la empresa", "La puesta en marcha dura de 1 a 2 semanas cuando el cliente entrega a tiempo la VPS, el dominio, el organigrama, los trabajadores, los clientes y el horario."],
         ],
         [2800, 6800],
     )
@@ -1836,7 +1843,7 @@ def build():
     )
     add_bullet(
         doc,
-        [("Aprobar el calendario de 8 a 12 semanas y las 3 horas mensuales de soporte.", False)],
+        [("Aprobar la puesta en marcha de 1 a 2 semanas, cuando el cliente entrega la información a tiempo, y las 3 horas mensuales de soporte.", False)],
     )
     add_bullet(
         doc,
